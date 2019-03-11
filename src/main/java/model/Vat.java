@@ -1,4 +1,4 @@
-package invoice;
+package model;
 
 import java.math.BigDecimal;
 
@@ -12,6 +12,10 @@ public enum Vat {
 
     Vat(BigDecimal rateValue) {
         this.rateValue = rateValue;
+    }
+
+    public BigDecimal getRateValue() {
+        return rateValue;
     }
 }
 
