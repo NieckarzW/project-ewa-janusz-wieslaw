@@ -1,4 +1,4 @@
-package pl.codestrust.model;
+package pl.coderstrust.model;
 
 public enum Vat {
     VAT_0(0.00f),
@@ -9,7 +9,7 @@ public enum Vat {
     private final float value;
 
     Vat(float rateValue) {
-        this.value = rateValue;
+        value = rateValue;
     }
 
     public float getValue() {

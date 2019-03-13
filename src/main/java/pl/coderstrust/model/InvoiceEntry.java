@@ -47,14 +47,18 @@ public class InvoiceEntry {
         return grossValue;
     }
 
-    public BigDecimal getVatRate() {
+    public Vat getVatRate() {
         return vatRate;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         InvoiceEntry that = (InvoiceEntry) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(productName, that.productName) &&

@@ -1,4 +1,4 @@
-package pl.codestrust.model;
+package pl.coderstrust.model;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,9 +16,9 @@ public final class Invoice {
         this.id = id;
         this.number = number;
         this.issueDate = issueDate;
-        this.seller = toCompany;
-        this.buyer = fromCompany;
-        this.entries = invoiceEntries;
+        seller = toCompany;
+        buyer = fromCompany;
+        entries = invoiceEntries;
     }
 
     public Long getId() {
@@ -47,8 +47,12 @@ public final class Invoice {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Invoice invoice = (Invoice) o;
         return Objects.equals(id, invoice.id) &&
                 Objects.equals(number, invoice.number) &&
