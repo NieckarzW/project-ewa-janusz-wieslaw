@@ -1,3 +1,5 @@
+package pl.coderstrust.model;
+
 import java.util.Objects;
 
 public class Company {
