@@ -1,17 +1,22 @@
 package pl.coderstrust.database;
 
+import pl.coderstrust.model.Invoice;
+
+import java.util.Collection;
+import java.util.Optional;
+
 interface Database {
-  void saveInvoice() throws DatabaseOperationException;
+  Invoice saveInvoice(Invoice invoice) throws DatabaseOperationException;
 
-  void deleteInvoice() throws DatabaseOperationException;
+  void deleteInvoice(Long id) throws DatabaseOperationException;
 
-  void getInvoice() throws DatabaseOperationException;
+  Optional<Invoice> getInvoice(Long id) throws DatabaseOperationException;
 
-  void getAllInvoices() throws DatabaseOperationException;
+  Collection<Invoice> getAllInvoices() throws DatabaseOperationException;
 
   void deleteAllInvoices() throws DatabaseOperationException;
 
-  void invoiceExists() throws DatabaseOperationException;
+  boolean invoiceExists(Long id) throws DatabaseOperationException;
 
-  void countInvoices() throws DatabaseOperationException;
+  long countInvoices() throws DatabaseOperationException;
 }
