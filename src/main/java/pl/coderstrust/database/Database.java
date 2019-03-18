@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import pl.coderstrust.model.Invoice;
 
-interface Database {
+public interface Database {
   Invoice saveInvoice(Invoice invoice) throws DatabaseOperationException;
 
   void deleteInvoice(Long id) throws DatabaseOperationException;
