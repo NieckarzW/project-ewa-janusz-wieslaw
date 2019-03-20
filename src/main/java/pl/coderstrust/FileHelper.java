@@ -107,6 +107,13 @@ public class FileHelper {
     return lastLine;
   }
 
-  public void removeLine(String filePath, int lineNumber) {}
+  public void removeLine(String filePath, int lineNumber) throws IOException {
+
+    List<String> linesFromFile = readLines(filePath);
+    linesFromFile.remove(lineNumber);
+    PrintWriter printWriter = new PrintWriter(new FileWriter(filePath));
+    printWriter.println(linesFromFile);
+    printWriter.close();
+  }
 }
 
