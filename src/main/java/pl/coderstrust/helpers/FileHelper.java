@@ -1,14 +1,9 @@
 package pl.coderstrust.helpers;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -81,9 +76,7 @@ public class FileHelper {
       throw new IllegalArgumentException("File path cannot be null");
     }
     File file = new File(filePath);
-    FileUtils.readLines(file, ENCODING, " ", true);
-    List<String> lines;
-    return lines;
+    return FileUtils.readLines(file, ENCODING);
   }
 
   public String readLastLine(String filePath) throws IOException {
@@ -104,8 +97,7 @@ public class FileHelper {
       throw new IllegalArgumentException("Line number cannot be null");
     }
     File file = new File(filePath);
-    FileUtils.readLines(file, ENCODING).remove(lineNumber);
-    FileUtils.writeLines(file, ENCODING, Collections<List> lines, true);
+    List<String> lines = Collections.singletonList(FileUtils.readLines(file, ENCODING).remove(lineNumber));
+    FileUtils.writeLines(file, ENCODING, lines, false);
   }
 }
-
