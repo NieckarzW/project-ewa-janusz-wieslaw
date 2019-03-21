@@ -82,6 +82,8 @@ public class FileHelper {
     }
     File file = new File(filePath);
     FileUtils.readLines(file, ENCODING, " ", true);
+    List<String> lines;
+    return lines;
   }
 
   public String readLastLine(String filePath) throws IOException {
@@ -102,10 +104,8 @@ public class FileHelper {
       throw new IllegalArgumentException("Line number cannot be null");
     }
     File file = new File(filePath);
-    FileUtils.readLines(file, ENCODING);
-    //usunąć wybraną linię
-    FileUtils.re(lineNumber);
-    FileUtils.writeLines(file, ENCODING,);
+    FileUtils.readLines(file, ENCODING).remove(lineNumber);
+    FileUtils.writeLines(file, ENCODING, Collections<List> lines, true);
   }
 }
 
