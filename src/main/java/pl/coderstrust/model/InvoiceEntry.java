@@ -1,3 +1,4 @@
+
 package pl.coderstrust.model;
 
 import java.math.BigDecimal;

@@ -1,8 +1,6 @@
 package pl.coderstrust.service;
 
-import pl.coderstrust.database.DatabaseOperationException;
-
-public class ServiceOperationException extends DatabaseOperationException {
+public class ServiceOperationException extends Exception {
   public ServiceOperationException() {
   }
 

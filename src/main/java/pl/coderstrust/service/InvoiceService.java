@@ -7,7 +7,7 @@ import pl.coderstrust.database.Database;
 import pl.coderstrust.database.DatabaseOperationException;
 import pl.coderstrust.model.Invoice;
 
-public class InvoiceService implements Database {
+public class InvoiceService {
 
   private Database database;
 
@@ -15,39 +15,74 @@ public class InvoiceService implements Database {
     this.database = database;
   }
 
-  @Override
-  public Invoice saveInvoice(Invoice invoice) throws DatabaseOperationException {
-    database.saveInvoice(invoice);
-    return invoice;
+  public Invoice addInvoice(Invoice invoice) throws ServiceOperationException {
+    if (invoice == null) {
+      throw new IllegalArgumentException("Invoice cannot be null");
+    }
+    try {
+      Long invoiceId = invoice.getId();
+      if (invoiceId != null && database.invoiceExists(invoiceId)) {
+        throw new ServiceOperationException("Invoice with given id already exists in database");
+      }
+      return database.saveInvoice(invoice);
+    } catch (DatabaseOperationException e) {
+      throw new ServiceOperationException("An error occurred while adding invoice", e);
+    }
   }
 
-  @Override
-  public void deleteInvoice(Long id) throws DatabaseOperationException {
-    database.deleteInvoice(id);
+  public Invoice updateInvoice(Invoice invoice) throws ServiceOperationException {
+    if (invoice == null) {
+      throw new IllegalArgumentException("Invoice cannot be null");
+    }
+    try {
+      Long invoiceId = invoice.getId();
+      if (invoiceId == null) {
+        throw new ServiceOperationException("Given invoice doesn't exist in database");
+      }
+      return database.saveInvoice(invoice);
+    } catch (DatabaseOperationException e) {
+      throw new ServiceOperationException("An error occurred while updating invoice", e);
+    }
   }
 
-  @Override
-  public Optional<Invoice> getInvoice(Long id) {
-    return Optional.empty();
+  public void deleteInvoice(Long id) throws ServiceOperationException {
+    if (id == null) {
+      throw new IllegalArgumentException("Id cannot be null");
+    }
+    try {
+      if (!database.invoiceExists(id)) {
+        throw new ServiceOperationException("Invoice with given id doesn't exist in database");
+      }
+      database.deleteInvoice(id);
+    } catch (DatabaseOperationException e) {
+      throw new ServiceOperationException("An error occurred while deleting invoice");
+    }
   }
 
-  @Override
-  public Collection<Invoice> getAllInvoices() {
-    return null;
+  public Optional<Invoice> getInvoice(Long id) throws ServiceOperationException {
+    if (id == null) {
+      throw new IllegalArgumentException("Id cannot be null");
+    }
+    try {
+      return database.getInvoice(id);
+    } catch (DatabaseOperationException e) {
+      throw new ServiceOperationException("An error occurred while retrieving invoice");
+    }
   }
 
-  @Override
-  public void deleteAllInvoices() {
-
+  public Collection<Invoice> getAllInvoices() throws ServiceOperationException {
+    try {
+      return database.getAllInvoices();
+    } catch (DatabaseOperationException e) {
+      throw new ServiceOperationException("An error occurred while retrieving all invoices", e);
+    }
   }
 
-  @Override
-  public boolean invoiceExists(Long id) {
-    return false;
-  }
-
-  @Override
-  public long countInvoices() {
-    return 0;
+  public void deleteAllInvoices() throws ServiceOperationException {
+    try {
+      database.deleteAllInvoices();
+    } catch (DatabaseOperationException e) {
+      throw new ServiceOperationException("An error occurred while deleting all invoices", e);
+    }
   }
 }
