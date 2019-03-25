@@ -97,10 +97,10 @@ class InvoiceServiceTest {
   @Test
   void shouldThrowServiceExceptionCausedByDatabaseExceptionOnUpdate() throws DatabaseOperationException {
     //given
-    Mockito.when(database.invoiceExists(invoiceWithId.getId())).thenThrow(DatabaseOperationException.class);
+    Mockito.when(database.saveInvoice(invoiceWithId)).thenThrow(DatabaseOperationException.class);
     //when
     //then
-    Assertions.assertThrows(ServiceOperationException.class, () -> invoiceService.addInvoice(invoiceWithId));
+    Assertions.assertThrows(ServiceOperationException.class, () -> invoiceService.updateInvoice(invoiceWithId));
   }
 
   //______deleteInvoice tests______
@@ -144,6 +144,15 @@ class InvoiceServiceTest {
   }
 
   //______getInvoice tests______
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionOnGet() {
+    //given
+    Long id = null;
+    //when
+    //then
+    Assertions.assertThrows(IllegalArgumentException.class, () -> invoiceService.getInvoice(id));
+  }
 
   @Test
   void shouldCallDatabaseGetMethod() throws DatabaseOperationException, ServiceOperationException {
