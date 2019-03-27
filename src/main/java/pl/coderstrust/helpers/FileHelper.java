@@ -65,7 +65,7 @@ public class FileHelper {
       throw new IllegalArgumentException("File path cannot be null");
     }
     if (line == null) {
-      throw new IllegalArgumentException("Line in file cannot be null");
+      throw new IllegalArgumentException("Line cannot be less or equal to zero");
     }
     File file = new File(filePath);
     FileUtils.writeLines(file, ENCODING, Collections.singleton(line), true);
@@ -97,7 +97,8 @@ public class FileHelper {
       throw new IllegalArgumentException("Line number cannot be null");
     }
     File file = new File(filePath);
-    List<String> lines = Collections.singletonList(FileUtils.readLines(file, ENCODING).remove(lineNumber));
+    List<String> lines = FileUtils.readLines(file, ENCODING);
+    lines.remove(lineNumber);
     FileUtils.writeLines(file, ENCODING, lines, false);
   }
 }
