@@ -12,6 +12,9 @@ public class InvoiceService {
   private Database database;
 
   public InvoiceService(Database database) {
+    if (database == null) {
+      throw new IllegalArgumentException("Database cannot be null");
+    }
     this.database = database;
   }
 
@@ -36,7 +39,7 @@ public class InvoiceService {
     }
     try {
       Long invoiceId = invoice.getId();
-      if (invoiceId == null) {
+      if (invoiceId == null || !database.invoiceExists(invoiceId)) {
         throw new ServiceOperationException("Given invoice doesn't exist in database");
       }
       return database.saveInvoice(invoice);
@@ -55,7 +58,7 @@ public class InvoiceService {
       }
       database.deleteInvoice(id);
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while deleting invoice");
+      throw new ServiceOperationException("An error occurred while deleting invoice", e);
     }
   }
 
@@ -66,7 +69,7 @@ public class InvoiceService {
     try {
       return database.getInvoice(id);
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while retrieving invoice");
+      throw new ServiceOperationException("An error occurred while retrieving invoice", e);
     }
   }
 
