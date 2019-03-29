@@ -8,17 +8,19 @@ public final class Invoice {
   private final Long id;
   private final String number;
   private final LocalDate issueDate;
+  private final LocalDate dueDate;
   private final Company seller;
   private final Company buyer;
   private final List<InvoiceEntry> entries;
 
-  public Invoice(Long id, String number, LocalDate issueDate, Company toCompany, Company fromCompany, List<InvoiceEntry> invoiceEntries) {
+  public Invoice(Long id, String number, LocalDate issueDate, LocalDate dueDate, Company seller, Company buyer, List<InvoiceEntry> entries) {
     this.id = id;
     this.number = number;
     this.issueDate = issueDate;
-    seller = toCompany;
-    buyer = fromCompany;
-    entries = invoiceEntries;
+    this.dueDate = dueDate;
+    this.seller = seller;
+    this.buyer = buyer;
+    this.entries = entries;
   }
 
   public Long getId() {
@@ -31,6 +33,10 @@ public final class Invoice {
 
   public LocalDate getIssueDate() {
     return issueDate;
+  }
+
+  public LocalDate getDueDate() {
+    return dueDate;
   }
 
   public Company getSeller() {
@@ -57,6 +63,7 @@ public final class Invoice {
     return Objects.equals(id, invoice.id)
         && Objects.equals(number, invoice.number)
         && Objects.equals(issueDate, invoice.issueDate)
+        && Objects.equals(dueDate, invoice.dueDate)
         && Objects.equals(seller, invoice.seller)
         && Objects.equals(buyer, invoice.buyer)
         && Objects.equals(entries, invoice.entries);
@@ -64,7 +71,7 @@ public final class Invoice {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, number, issueDate, seller, buyer, entries);
+    return Objects.hash(id, number, issueDate, dueDate, seller, buyer, entries);
   }
 
   @Override
@@ -73,6 +80,7 @@ public final class Invoice {
         + "id=" + id
         + ", number='" + number + '\''
         + ", issueDate=" + issueDate
+        + ", dueDate=" + dueDate
         + ", seller=" + seller
         + ", buyer=" + buyer
         + ", entries=" + entries
