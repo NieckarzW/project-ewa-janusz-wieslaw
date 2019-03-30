@@ -1,16 +1,25 @@
 package pl.coderstrust.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+
+@Entity
 public final class Invoice {
+
+  @Id
+
   private final Long id;
   private final String number;
   private final LocalDate issueDate;
   private final LocalDate dueDate;
   private final Company seller;
   private final Company buyer;
+
+
   private final List<InvoiceEntry> entries;
 
   public Invoice(Long id, String number, LocalDate issueDate, LocalDate dueDate, Company seller, Company buyer, List<InvoiceEntry> entries) {
