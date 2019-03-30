@@ -93,12 +93,12 @@ public class FileHelper {
     if (filePath == null) {
       throw new IllegalArgumentException("File path cannot be null");
     }
-    if (lineNumber == 0) {
-      throw new IllegalArgumentException("Line number cannot be null");
+    if (lineNumber <= 0) {
+      throw new IllegalArgumentException("Line number cannot be less or equal to zero.");
     }
     File file = new File(filePath);
     List<String> lines = FileUtils.readLines(file, ENCODING);
-    lines.remove(lineNumber);
+    lines.remove(lineNumber - 1);
     FileUtils.writeLines(file, ENCODING, lines, false);
   }
 }
