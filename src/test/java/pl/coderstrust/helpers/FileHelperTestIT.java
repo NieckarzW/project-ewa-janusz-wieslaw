@@ -14,6 +14,9 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
 
 class FileHelperTestIT {
 
@@ -47,23 +50,10 @@ class FileHelperTestIT {
   }
 
   @Test
-  void createMethodShouldThrowExceptionForNullAsFilePath() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      fileHelper.create(null);
-    });
-  }
-
-  @Test
   void shouldDeleteExistingFile() throws IOException {
-    //When
-    fileHelper.delete(INPUT_FILE);
+    //Given
+    fileHelper.create(INPUT_FILE);
 
-    //Then
-    assertTrue(new File(INPUT_FILE).exists());
-  }
-
-  @Test
-  void shouldDeleteNotExistingFile() throws IOException {
     //When
     fileHelper.delete(INPUT_FILE);
 
@@ -72,10 +62,12 @@ class FileHelperTestIT {
   }
 
   @Test
-  void deleteMethodShouldThrowExceptionForNullAsFilePath() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      fileHelper.delete(null);
-    });
+  void shouldDeleteNotExistingFile() {
+    //When
+    fileHelper.delete(INPUT_FILE);
+
+    //Then
+    assertFalse(new File(INPUT_FILE).exists());
   }
 
   @Test
@@ -94,13 +86,6 @@ class FileHelperTestIT {
   }
 
   @Test
-  void clearMethodShouldThrowExceptionForNullAsFilePath() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      fileHelper.clear(null);
-    });
-  }
-
-  @Test
   void shouldReturnTrueIfFileExists() throws IOException {
     //Given
     File file = new File(INPUT_FILE);
@@ -114,23 +99,12 @@ class FileHelperTestIT {
   }
 
   @Test
-  void shouldReturnFalseIfFileDoesNotExist() throws IOException {
-    //Given
-    File file = new File(INPUT_FILE);
-    file.createNewFile();
-
+  void shouldReturnFalseIfFileDoesNotExists() {
     //When
     boolean result = fileHelper.exists(INPUT_FILE);
 
     //Then
     assertFalse(result);
-  }
-
-  @Test
-  void existMethodShouldThrowExceptionForNullAsFilePath() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      fileHelper.exists(null);
-    });
   }
 
   @Test
@@ -149,19 +123,13 @@ class FileHelperTestIT {
   void shouldReturnFalseIfFileIsNotEmpty() throws IOException {
     //Given
     fileHelper.create(INPUT_FILE);
+    fileHelper.writeLine(INPUT_FILE, "test");
 
     //When
     boolean result = fileHelper.isEmpty(INPUT_FILE);
 
     //Then
     assertFalse(result);
-  }
-
-  @Test
-  void isEmptyMethodShouldThrowExceptionForNullAsFilePath() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      fileHelper.isEmpty(null);
-    });
   }
 
   @Test
@@ -177,13 +145,6 @@ class FileHelperTestIT {
 
     //Then
     assertTrue(FileUtils.contentEquals(expectedFile, inputFile));
-  }
-
-  @Test
-  void writeLineMethodShouldThrowExceptionForNullAsFilePath() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      fileHelper.writeLine(null, " ");
-    });
   }
 
   @Test
@@ -206,13 +167,6 @@ class FileHelperTestIT {
   }
 
   @Test
-  void readLinesMethodShouldThrowExceptionForNullAsFilePath() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      fileHelper.readLines(null);
-    });
-  }
-
-  @Test
   void shouldReadLastLineFromFile() throws IOException {
     //Given
     File inputFile = new File(INPUT_FILE);
@@ -226,13 +180,6 @@ class FileHelperTestIT {
 
     //Then
     assertEquals(expected, result);
-  }
-
-  @Test
-  void readLastLineMethodShouldThrowExceptionForNullAsFilePath() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      fileHelper.readLastLine(null);
-    });
   }
 
   @Test
@@ -255,16 +202,58 @@ class FileHelperTestIT {
   }
 
   @Test
-  void removeLineMethodShouldThrowExceptionForNullAsFilePath() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      fileHelper.removeLine(null, 2);
-    });
+  void createMethodShouldThrowExceptionForNullAsFilePath() {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.create(null));
   }
 
   @Test
-  void removeLineMethodShouldThrowExceptionForNumberLowerThanZeroAsLineNumber() {
-    assertThrows(IllegalArgumentException.class, () -> {
-      fileHelper.removeLine(INPUT_FILE, -1);
-    });
+  void deleteMethodShouldThrowExceptionForNullAsFilePath() {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.delete(null));
+  }
+
+  @Test
+  void existMethodShouldThrowExceptionForNullAsFilePath() {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.exists(null));
+  }
+
+  @Test
+  void isEmptyMethodShouldThrowExceptionForNullAsFilePath() {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.isEmpty(null));
+  }
+
+  @Test
+  void clearMethodShouldThrowExceptionForNullAsFilePath() {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.clear(null));
+  }
+
+  @Test
+  void writeLineMethodShouldThrowExceptionForNullAsFilePath() {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.writeLine(null, "test"));
+  }
+
+  @Test
+  void writeLineMethodShouldThrowExceptionForNullAsLine() {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.writeLine(INPUT_FILE, null));
+  }
+
+  @Test
+  void readLinesMethodShouldThrowExceptionForNullAsFilePath() {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.readLines(null));
+  }
+
+  @Test
+  void readLastLineMethodShouldThrowExceptionForNullAsFilePath() {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.readLastLine(null));
+  }
+
+  @Test
+  void removeLineMethodShouldThrowExceptionForNullAsFilePath() {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.removeLine(null, 1));
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {0, -1, -10})
+  void removeLineMethodShouldThrowExceptionForInvalidLineNumber(int lineNumber) {
+    assertThrows(IllegalArgumentException.class, () -> fileHelper.removeLine(INPUT_FILE, lineNumber));
   }
 }
