@@ -24,22 +24,28 @@ public class HibernateDatabase implements Database{
 
   @Override
   public void deleteInvoice(Long id) throws DatabaseOperationException {
+    if (id == null) {
+      throw new IllegalArgumentException("Invoice cannot be null");
+    }
     repository.deleteById(id);
   }
 
   @Override
   public Optional<Invoice> getInvoice(Long id) throws DatabaseOperationException {
+    if (id == null) {
+      throw new IllegalArgumentException("Invoice cannot be null");
+    }
     return Optional.empty();
   }
 
   @Override
   public Collection<Invoice> getAllInvoices() throws DatabaseOperationException {
-    return null;
+    return repository.
   }
 
   @Override
   public void deleteAllInvoices() throws DatabaseOperationException {
-
+  repository.deleteAll(invoice);
   }
 
   @Override
