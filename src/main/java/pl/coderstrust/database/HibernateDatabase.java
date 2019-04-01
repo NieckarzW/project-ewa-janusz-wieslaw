@@ -1,7 +1,10 @@
 package pl.coderstrust.database;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import pl.coderstrust.model.Invoice;
 
@@ -40,7 +43,8 @@ public class HibernateDatabase implements Database{
 
   @Override
   public Collection<Invoice> getAllInvoices() throws DatabaseOperationException {
-    return repository.
+    Iterable<Invoice> invoices = repository.findAll();
+    return StreamSupport.stream(invoices.spliterator(), false).collect(Collectors.toList());
   }
 
   @Override
