@@ -1,9 +1,14 @@
 package pl.coderstrust.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Entity
 public class InvoiceEntry {
+
+  @Id
 
   private final Long id;
   private final String productName;

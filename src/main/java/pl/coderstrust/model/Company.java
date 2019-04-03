@@ -1,8 +1,13 @@
 package pl.coderstrust.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Objects;
 
+@Entity
 public class Company {
+
+  @Id
 
   private final Long id;
   private final String name;
