@@ -14,11 +14,11 @@ public class CompanyGenerator {
     String email = WordGenerator.getRandomWord();
 
     return new Company(id,
-            name,
-            address,
-            taxid,
-            accountNumber,
-            phoneNumber,
-            email);
+        name,
+        address,
+        taxid,
+        accountNumber,
+        phoneNumber,
+        email);
   }
 }

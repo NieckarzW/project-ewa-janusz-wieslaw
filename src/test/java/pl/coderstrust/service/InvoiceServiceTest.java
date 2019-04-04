@@ -1,7 +1,9 @@
 package pl.coderstrust.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -260,9 +262,10 @@ class InvoiceServiceTest {
     when(database.invoiceExists(id)).thenReturn(true);
 
     //When
-    invoiceService.invoiceExists(id);
+    boolean check = invoiceService.invoiceExists(id);
 
     //Then
+    assertTrue(check);
     verify(database).invoiceExists(id);
   }
 
@@ -273,9 +276,10 @@ class InvoiceServiceTest {
     when(database.invoiceExists(id)).thenReturn(false);
 
     //When
-    invoiceService.invoiceExists(id);
+    boolean check = invoiceService.invoiceExists(id);
 
     //Then
+    assertFalse(check);
     verify(database).invoiceExists(id);
   }
 }

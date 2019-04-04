@@ -1,6 +1,7 @@
 package pl.coderstrust.generators;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.concurrent.ThreadLocalRandom;
 
 import pl.coderstrust.model.InvoiceEntry;
@@ -14,15 +15,15 @@ public class InvoiceEntryGenerator {
     long quantity = ThreadLocalRandom.current().nextLong(1, 999);
     BigDecimal price = BigDecimal.valueOf(ThreadLocalRandom.current().nextInt(1, 50) * quantity);
     Vat vatRate = VatRateGenerator.getRandomVatRate(Vat.class);
-    BigDecimal vatValue = price.multiply(BigDecimal.valueOf(vatRate.getValue())).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+    BigDecimal vatValue = price.multiply(BigDecimal.valueOf(vatRate.getValue())).setScale(2, RoundingMode.HALF_EVEN);
     BigDecimal grossValue = price.add(vatValue);
 
     return new InvoiceEntry(id,
-            productName,
-            quantity,
-            price,
-            vatValue,
-            grossValue,
-            vatRate);
+        productName,
+        quantity,
+        price,
+        vatValue,
+        grossValue,
+        vatRate);
   }
 }

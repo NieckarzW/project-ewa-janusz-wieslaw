@@ -23,12 +23,12 @@ public class InvoiceGenerator {
     }
 
     return new Invoice(id,
-            number,
-            issueDate,
-            dueDate,
-            seller,
-            buyer,
-            entries);
+        number,
+        issueDate,
+        dueDate,
+        seller,
+        buyer,
+        entries);
 
   }
 }
