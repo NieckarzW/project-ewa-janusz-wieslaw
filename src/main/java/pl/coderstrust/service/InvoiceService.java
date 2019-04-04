@@ -103,4 +103,22 @@ public class InvoiceService {
       throw new ServiceOperationException("An error occurred while checking if invoice exists.", e);
     }
   }
+
+  public Optional<Invoice> getInvoiceByNumber(String number) throws ServiceOperationException {
+    if (number == null) {
+      throw new IllegalArgumentException("Number cannot be null");
+    }
+    Collection<Invoice> allInvoices;
+    try {
+      allInvoices = database.getAllInvoices();
+      for (Invoice invoice : allInvoices) {
+        if (invoice.getNumber().equals(number)) {
+          return Optional.ofNullable(invoice);
+        }
+      }
+      throw new IllegalArgumentException("No invoice with given number");
+    } catch (DatabaseOperationException e) {
+      throw new ServiceOperationException("An error occurred while retrieving invoice", e);
+    }
+  }
 }
