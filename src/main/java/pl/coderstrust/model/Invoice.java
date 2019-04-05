@@ -3,6 +3,7 @@ package pl.coderstrust.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,11 +18,13 @@ public final class Invoice {
   private final Long id;
   private final String number;
   private final LocalDate issueDate;
+  @ManyToOne(cascade = CascadeType.ALL)
   private final LocalDate dueDate;
   private final Company seller;
+  @ManyToOne(cascade = CascadeType.ALL)
   private final Company buyer;
 
-  @OneToMany (mappedBy="invoice",cascade = CascadeType.ALL )
+  @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
   private final List<InvoiceEntry> entries;
 
   public Invoice(Long id, String number, LocalDate issueDate, LocalDate dueDate, Company seller, Company buyer, List<InvoiceEntry> entries) {

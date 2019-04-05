@@ -1,6 +1,5 @@
 package pl.coderstrust.model;
 
-
 public enum Vat {
   VAT_0(0.00f),
   VAT_5(0.05f),
@@ -20,7 +19,7 @@ public enum Vat {
   @Override
   public String toString() {
     return "Vat{"
-        + "value=" + value
-        + '}';
+            + "value=" + value
+            + '}';
   }
 }

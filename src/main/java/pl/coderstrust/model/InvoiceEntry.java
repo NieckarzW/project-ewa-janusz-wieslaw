@@ -1,6 +1,8 @@
 package pl.coderstrust.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -9,7 +11,7 @@ import java.util.Objects;
 public class InvoiceEntry {
 
   @Id
-
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private final Long id;
   private final String productName;
   private final Long quantity;
@@ -66,10 +68,10 @@ public class InvoiceEntry {
     }
     InvoiceEntry that = (InvoiceEntry) o;
     return Objects.equals(id, that.id)
-        && Objects.equals(productName, that.productName)
-        && Objects.equals(price, that.price)
-        && Objects.equals(vatValue, that.vatValue)
-        && Objects.equals(vatRate, that.vatRate);
+            && Objects.equals(productName, that.productName)
+            && Objects.equals(price, that.price)
+            && Objects.equals(vatValue, that.vatValue)
+            && Objects.equals(vatRate, that.vatRate);
   }
 
   @Override
@@ -80,13 +82,13 @@ public class InvoiceEntry {
   @Override
   public String toString() {
     return "InvoiceEntry{"
-        + "id=" + id
-        + ", productName='" + productName + '\''
-        + ", quantity=" + quantity
-        + ", price=" + price
-        + ", vatValue=" + vatValue
-        + ", grossValue=" + grossValue
-        + ", vatRate=" + vatRate
-        + '}';
+            + "id=" + id
+            + ", productName='" + productName + '\''
+            + ", quantity=" + quantity
+            + ", price=" + price
+            + ", vatValue=" + vatValue
+            + ", grossValue=" + grossValue
+            + ", vatRate=" + vatRate
+            + '}';
   }
 }
