@@ -1,11 +1,11 @@
 package pl.coderstrust.database;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.NonTransientDataAccessException;
 import pl.coderstrust.model.Invoice;
 
 public class HibernateDatabase implements Database {
@@ -25,69 +25,70 @@ public class HibernateDatabase implements Database {
     if (invoice == null) {
       throw new IllegalArgumentException("Invoice cannot be null");
     }
-    if (repository == null) {
-      throw new DatabaseOperationException("Repository cannot be empty");
-    }
     try {
-      repository.save(invoice);
+      return repository.save(invoice);
     } catch (EmptyResultDataAccessException e) {
-      return null;
+      return repository.save(invoice);
     }
-    return repository.save(invoice);
   }
 
   @Override
   public void deleteInvoice(Long id) throws DatabaseOperationException {
     if (id == null) {
-      throw new IllegalArgumentException("Invoice cannot be null");
+      throw new IllegalArgumentException("Id cannot be null");
     }
-    repository.deleteById(id);
-    if (repository == null) {
-      throw new DatabaseOperationException("Repository cannot be empty");
+    try {
+      repository.deleteById(id);
+    } catch (EmptyResultDataAccessException e) {
+      throw new DatabaseOperationException(String.format("There was no invoice in database with id %s", id), e);
     }
   }
 
   @Override
   public Optional<Invoice> getInvoice(Long id) throws DatabaseOperationException {
     if (id == null) {
-      throw new IllegalArgumentException("Invoice cannot be null");
+      throw new IllegalArgumentException("Id cannot be null");
     }
-    if (repository == null) {
-      throw new DatabaseOperationException("Repository cannot be empty");
+    try {
+      return repository.findById(id);
+    } catch (NoSuchElementException e) {
+      throw new DatabaseOperationException(String.format("Encountered problems while searching for invoice:, %s", id), e);
     }
-    return Optional.empty();
   }
 
   @Override
   public Collection<Invoice> getAllInvoices() throws DatabaseOperationException {
-    if (repository == null) {
-      throw new DatabaseOperationException("Repository cannot be empty");
+    try {
+      return repository.findAll();
+    } catch (NonTransientDataAccessException e) {
+      throw new DatabaseOperationException("Encountered problems while searching for invoices.", e);
     }
-    Iterable<Invoice> invoices = repository.findAll();
-    return StreamSupport.stream(invoices.spliterator(), false).collect(Collectors.toList());
   }
 
   @Override
   public void deleteAllInvoices() throws DatabaseOperationException {
-    if (repository == null) {
-      throw new DatabaseOperationException("Repository cannot be empty");
+    try {
+      repository.deleteAll();
+    } catch (NonTransientDataAccessException e) {
+      throw new DatabaseOperationException("Encountered problem while deleting invoices.", e);
     }
-    repository.deleteAll();
   }
 
   @Override
   public boolean invoiceExists(Long id) throws DatabaseOperationException {
-    if (repository == null) {
-      throw new DatabaseOperationException("Repository cannot be empty");
+    try {
+      return repository.existsById(id);
+    } catch (NonTransientDataAccessException e) {
+      throw new DatabaseOperationException(String.format("Encountered problems looking for invoice: %s", id), e);
     }
-    return repository.existsById(id);
   }
 
   @Override
   public long countInvoices() throws DatabaseOperationException {
-    if (repository == null) {
-      throw new DatabaseOperationException("Repository cannot be empty");
+    try {
+      return repository.count();
+    } catch (NonTransientDataAccessException e) {
+      throw new DatabaseOperationException("Encountered problems while counting invoices.", e);
     }
-    return repository.count();
   }
 }

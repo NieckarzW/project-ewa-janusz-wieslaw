@@ -2,6 +2,9 @@ package pl.coderstrust.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -14,7 +17,7 @@ import java.util.Objects;
 public final class Invoice {
 
   @Id
-
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private final Long id;
   private final String number;
   private final LocalDate issueDate;
@@ -23,8 +26,7 @@ public final class Invoice {
   private final Company seller;
   @ManyToOne(cascade = CascadeType.ALL)
   private final Company buyer;
-
-  @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private final List<InvoiceEntry> entries;
 
   public Invoice(Long id, String number, LocalDate issueDate, LocalDate dueDate, Company seller, Company buyer, List<InvoiceEntry> entries) {
