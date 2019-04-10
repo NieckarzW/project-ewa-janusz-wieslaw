@@ -106,19 +106,15 @@ public class InvoiceService {
 
   public Optional<Invoice> getInvoiceByNumber(String number) throws ServiceOperationException {
     if (number == null) {
-      throw new IllegalArgumentException("Number cannot be null");
+      throw new IllegalArgumentException("Number cannot be null.");
     }
-    Collection<Invoice> allInvoices;
     try {
-      allInvoices = database.getAllInvoices();
-      for (Invoice invoice : allInvoices) {
-        if (invoice.getNumber().equals(number)) {
-          return Optional.ofNullable(invoice);
-        }
-      }
-      throw new IllegalArgumentException("No invoice with given number");
+      return database.getAllInvoices()
+          .stream()
+          .filter(invoice -> invoice.getNumber().equals(number))
+          .findFirst();
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while retrieving invoice", e);
+      throw new ServiceOperationException("An error occurred while retrieving invoice by number.", e);
     }
   }
 }
