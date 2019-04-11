@@ -76,6 +76,9 @@ public class HibernateDatabase implements Database {
 
   @Override
   public boolean invoiceExists(Long id) throws DatabaseOperationException {
+    if (id == null) {
+      throw new IllegalArgumentException("Id cannot be null.");
+    }
     try {
       return repository.existsById(id);
     } catch (NonTransientDataAccessException e) {
