@@ -4,21 +4,26 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.stereotype.Repository;
 import pl.coderstrust.model.Invoice;
 
+@ConditionalOnProperty(name = "pl.coderstrust.database", havingValue = "hibernate")
+@Repository
 public class HibernateDatabase implements Database {
 
   private HibernateInvoiceRepository repository;
 
+  @Autowired
   public HibernateDatabase(HibernateInvoiceRepository repository) throws IllegalArgumentException {
     if (repository == null) {
       throw new IllegalArgumentException("Repository cannot be null");
     }
     this.repository = repository;
   }
-
 
   @Override
   public Invoice saveInvoice(Invoice invoice) throws DatabaseOperationException {
