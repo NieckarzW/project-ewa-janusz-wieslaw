@@ -32,8 +32,8 @@ public class HibernateDatabase implements Database {
     }
     try {
       return repository.save(invoice);
-    } catch (EmptyResultDataAccessException e) {
-      return repository.save(invoice);
+    } catch (NonTransientDataAccessException e) {
+      throw new DatabaseOperationException(String.format("Encountered problems saving invoice: %s", invoice), e);
     }
   }
 
