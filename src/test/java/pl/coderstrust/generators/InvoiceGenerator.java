@@ -8,7 +8,7 @@ import pl.coderstrust.model.Invoice;
 import pl.coderstrust.model.InvoiceEntry;
 
 public class InvoiceGenerator {
-  
+
   public static Invoice getRandomInvoice() {
     long id = IdGenerator.getNextId();
     String number = WordGenerator.getRandomWord();

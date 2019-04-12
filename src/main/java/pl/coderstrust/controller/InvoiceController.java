@@ -3,6 +3,7 @@ package pl.coderstrust.controller;
 
 
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +26,7 @@ public class InvoiceController {
 
   private InvoiceService invoiceService;
 
+  @Autowired
   public InvoiceController(InvoiceService invoiceService) {
     if (invoiceService == null) {
       throw new IllegalArgumentException("Invoice service cannot be null");
