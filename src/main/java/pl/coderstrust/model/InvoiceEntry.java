@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class InvoiceEntry {
@@ -20,7 +22,14 @@ public class InvoiceEntry {
   private final BigDecimal grossValue;
   private final Vat vatRate;
 
-  public InvoiceEntry(Long id, String productName, Long quantity, BigDecimal price, BigDecimal vatValue, BigDecimal grossValue, Vat vatRate) {
+  @JsonCreator
+  public InvoiceEntry(@JsonProperty("id") Long id,
+                      @JsonProperty("productName") String productName,
+                      @JsonProperty("quantity") Long quantity,
+                      @JsonProperty("price") BigDecimal price,
+                      @JsonProperty("vatValue") BigDecimal vatValue,
+                      @JsonProperty("grossValue") BigDecimal grossValue,
+                      @JsonProperty("vatRate") Vat vatRate) {
     this.id = id;
     this.productName = productName;
     this.quantity = quantity;

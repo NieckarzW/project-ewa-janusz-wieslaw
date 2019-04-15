@@ -184,9 +184,12 @@ class InvoiceControllerTest {
     when(invoiceService.addInvoice(invoice)).thenReturn(invoice);
 
     //then
+
+    String asd = mapper.writeValueAsString(invoice);
+
     mvc.perform(post("/invoices")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(invoice)))
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .content(asd))
         .andExpect(status().isOk())
         .andExpect(content().json(mapper.writeValueAsString(invoice)));
 

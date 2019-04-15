@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public final class Invoice {
@@ -28,7 +30,14 @@ public final class Invoice {
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private final List<InvoiceEntry> entries;
 
-  public Invoice(Long id, String number, LocalDate issueDate, LocalDate dueDate, Company seller, Company buyer, List<InvoiceEntry> entries) {
+  @JsonCreator
+  public Invoice(@JsonProperty("id") Long id,
+                 @JsonProperty("number") String number,
+                 @JsonProperty("issueDate") LocalDate issueDate,
+                 @JsonProperty("dueDate") LocalDate dueDate,
+                 @JsonProperty("seller") Company seller,
+                 @JsonProperty("buyer") Company buyer,
+                 @JsonProperty("entries") List<InvoiceEntry> entries) {
     this.id = id;
     this.number = number;
     this.issueDate = issueDate;
