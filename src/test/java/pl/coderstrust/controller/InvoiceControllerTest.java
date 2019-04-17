@@ -1,5 +1,6 @@
 package pl.coderstrust.controller;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ class InvoiceControllerTest {
 
   @Test
   void shouldThrowIllegalArgumentExceptionForNullAsInvoiceService() {
-    Assertions.assertThrows(IllegalArgumentException.class, () -> new InvoiceController(null));
+    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(null));
   }
 
   @Test
@@ -157,7 +157,7 @@ class InvoiceControllerTest {
   }
 
   @Test
-  void shouldReturnInternalServerErrorDuringGettingInvoiceByNumberWhenSomethingWentWrongOnServer() throws Exception {
+  void shouldReturnInternalServerErrorStatusDuringGettingInvoiceByNumberWhenSomethingWentWrongOnServer() throws Exception {
     //given
     doThrow(ServiceOperationException.class).when(invoiceService).getInvoiceByNumber("1111");
 
@@ -184,12 +184,9 @@ class InvoiceControllerTest {
     when(invoiceService.addInvoice(invoice)).thenReturn(invoice);
 
     //then
-
-    String asd = mapper.writeValueAsString(invoice);
-
     mvc.perform(post("/invoices")
-        .contentType(MediaType.APPLICATION_JSON_UTF8)
-        .content(asd))
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(mapper.writeValueAsString(invoice)))
         .andExpect(status().isOk())
         .andExpect(content().json(mapper.writeValueAsString(invoice)));
 
@@ -225,7 +222,7 @@ class InvoiceControllerTest {
   }
 
   @Test
-  void shouldReturnInternalServerErrorDuringAddingInvoiceWhenSomethingWentWrongOnServer() throws Exception {
+  void shouldReturnInternalServerErrorStatusDuringAddingInvoiceWhenSomethingWentWrongOnServer() throws Exception {
     //given
     Invoice invoice = InvoiceGenerator.getRandomInvoice();
     doThrow(ServiceOperationException.class).when(invoiceService).addInvoice(invoice);
@@ -302,7 +299,7 @@ class InvoiceControllerTest {
   }
 
   @Test
-  void shouldReturnInternalServerErrorDuringUpdatingInvoiceWhenSomethingWentWrongOnServer() throws Exception {
+  void shouldReturnInternalServerErrorStatusDuringUpdatingInvoiceWhenSomethingWentWrongOnServer() throws Exception {
     //given
     Invoice invoice = InvoiceGenerator.getRandomInvoice();
     when(invoiceService.invoiceExists(invoice.getId())).thenReturn(true);
