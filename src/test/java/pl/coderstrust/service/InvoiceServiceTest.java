@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -220,7 +219,7 @@ class InvoiceServiceTest {
   }
 
   @Test
-  void deleteAllInvoicesMethodShouldThrowInvoiceServiceOperationExceptionWhenWhenAnErrorOccurDuringDeletingAllInvoicesFromDatabase() throws DatabaseOperationException {
+  void deleteAllInvoicesMethodShouldThrowInvoiceServiceOperationExceptionWhenAnErrorOccurDuringDeletingAllInvoicesFromDatabase() throws DatabaseOperationException {
     //Given
     doThrow(DatabaseOperationException.class).when(database).deleteAllInvoices();
 
@@ -281,5 +280,38 @@ class InvoiceServiceTest {
     //Then
     assertFalse(check);
     verify(database).invoiceExists(id);
+  }
+
+  @Test
+  void getInvoiceByNumberMethodShouldThrowIllegalArgumentExceptionForNullAsId() {
+    assertThrows(IllegalArgumentException.class, () -> invoiceService.getInvoiceByNumber(null));
+  }
+
+  @Test
+  void shouldGetInvoiceByNumber() throws DatabaseOperationException, ServiceOperationException {
+    //Given
+    List<Invoice> expectedInvoices = new ArrayList<>();
+    Invoice randomInvoice1 = InvoiceGenerator.getRandomInvoice();
+    Invoice randomInvoice2 = InvoiceGenerator.getRandomInvoice();
+    expectedInvoices.add(randomInvoice1);
+    expectedInvoices.add(randomInvoice2);
+    String invoice2Number = randomInvoice2.getNumber();
+    when(database.getAllInvoices()).thenReturn(expectedInvoices);
+
+    //When
+    Optional<Invoice> expectedInvoice = invoiceService.getInvoiceByNumber(invoice2Number);
+
+    //Then
+    assertEquals(Optional.ofNullable(randomInvoice2), expectedInvoice);
+    verify(database).getAllInvoices();
+  }
+
+  @Test
+  void getInvoiceByNumberMethodShouldThrowInvoiceServiceOperationExceptionWhenAnErrorOccurDuringGettingAllInvoicesFromDatabase() throws DatabaseOperationException {
+    //Given
+    doThrow(DatabaseOperationException.class).when(database).getAllInvoices();
+
+    //Then
+    assertThrows(ServiceOperationException.class, () -> invoiceService.getAllInvoices());
   }
 }

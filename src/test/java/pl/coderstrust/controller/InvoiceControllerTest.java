@@ -81,7 +81,7 @@ class InvoiceControllerTest {
   }
 
   @Test
-  void shouldReturnInternalServerErrorDuringGettingAllInvoicesWhenSomethingWentWrongOnServer() throws Exception {
+  void shouldReturnInternalServerErrorStatusDuringGettingAllInvoicesWhenSomethingWentWrongOnServer() throws Exception {
     //given
     doThrow(ServiceOperationException.class).when(invoiceService).getAllInvoices();
 
@@ -119,7 +119,7 @@ class InvoiceControllerTest {
   }
 
   @Test
-  void shouldReturnInternalServerErrorDuringGettingInvoiceWhenSomethingWentWrongOnServer() throws Exception {
+  void shouldReturnInternalServerErrorStatusDuringGettingInvoiceWhenSomethingWentWrongOnServer() throws Exception {
     //given
     doThrow(ServiceOperationException.class).when(invoiceService).getInvoice(1L);
 
