@@ -1,8 +1,11 @@
 package pl.coderstrust.database;
 
+import org.springframework.dao.NonTransientDataAccessException;
+import pl.coderstrust.model.Invoice;
+
 public class DatabaseOperationException extends Exception {
 
-  public DatabaseOperationException() {
+  public DatabaseOperationException(Invoice invoice, NonTransientDataAccessException e) {
   }
 
   public DatabaseOperationException(String message) {
@@ -13,7 +16,7 @@ public class DatabaseOperationException extends Exception {
     super(message, cause);
   }
 
-  public DatabaseOperationException(Throwable cause) {
+  public DatabaseOperationException(String message, Invoice invoice, Throwable cause) {
     super(cause);
   }
 

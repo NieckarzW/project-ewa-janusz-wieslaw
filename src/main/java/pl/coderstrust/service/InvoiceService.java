@@ -2,6 +2,9 @@ package pl.coderstrust.service;
 
 import java.util.Collection;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.database.Database;
@@ -12,6 +15,7 @@ import pl.coderstrust.model.Invoice;
 public class InvoiceService {
 
   private Database database;
+  private static Logger logger = LoggerFactory.getLogger(InvoiceService.class);
 
   @Autowired
   public InvoiceService(Database database) {
@@ -30,9 +34,14 @@ public class InvoiceService {
       if (invoiceId != null && database.invoiceExists(invoiceId)) {
         throw new ServiceOperationException("Invoice with given id already exists in database.");
       }
+      logger.debug("Saving invoice.");
       return database.saveInvoice(invoice);
+
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while adding invoice.", e);
+      String message = String.format("An error occurred while adding invoice.");
+      logger.error(message);
+      throw new ServiceOperationException(message, e);
+
     }
   }
 
@@ -45,9 +54,12 @@ public class InvoiceService {
       if (invoiceId == null || !database.invoiceExists(invoiceId)) {
         throw new ServiceOperationException("Given invoice doesn't exist in database.");
       }
+      logger.debug("Updating invoice.");
       return database.saveInvoice(invoice);
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while updating invoice.", e);
+      String message = String.format("An error occurred while adding invoice.");
+      logger.error(message);
+      throw new ServiceOperationException(message, e);
     }
   }
 
@@ -61,7 +73,9 @@ public class InvoiceService {
       }
       database.deleteInvoice(id);
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while deleting invoice.", e);
+      String message = String.format("An error occurred while deleting invoice.");
+      logger.error(message);
+      throw new ServiceOperationException(message, e);
     }
   }
 
@@ -70,25 +84,34 @@ public class InvoiceService {
       throw new IllegalArgumentException("Id cannot be null.");
     }
     try {
+      logger.debug("Getting an invoice");
       return database.getInvoice(id);
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while retrieving invoice", e);
+      String message = String.format("An error occurred while retrieving invoice", e);
+      logger.error(message);
+      throw new ServiceOperationException(message, e);
     }
   }
 
   public Collection<Invoice> getAllInvoices() throws ServiceOperationException {
     try {
+      logger.debug("Getting all invoices");
       return database.getAllInvoices();
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while retrieving all invoices.", e);
+      String message = String.format("An error occurred while retrieving all invoices.");
+      logger.error(message);
+      throw new ServiceOperationException(message, e);
     }
   }
 
   public void deleteAllInvoices() throws ServiceOperationException {
     try {
       database.deleteAllInvoices();
+      logger.debug("Deleting all invoices");
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while deleting all invoices.", e);
+      String message = String.format("An error occurred while deleting all invoices.");
+      logger.error(message);
+      throw new ServiceOperationException(message, e);
     }
   }
 
@@ -97,23 +120,12 @@ public class InvoiceService {
       throw new IllegalArgumentException("Id cannot be null.");
     }
     try {
+      logger.debug("Chcecking if invoice exists.");
       return database.invoiceExists(id);
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while checking if invoice exists.", e);
-    }
-  }
-
-  public Optional<Invoice> getInvoiceByNumber(String number) throws ServiceOperationException {
-    if (number == null) {
-      throw new IllegalArgumentException("Number cannot be null.");
-    }
-    try {
-      return database.getAllInvoices()
-          .stream()
-          .filter(invoice -> invoice.getNumber().equals(number))
-          .findFirst();
-    } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while retrieving invoice by number.", e);
+      String message = String.format("An error occurred while checking if invoice exists.");
+      logger.error(message);
+      throw new ServiceOperationException(message, e);
     }
   }
 }

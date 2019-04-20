@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,6 +18,7 @@ import pl.coderstrust.model.Invoice;
 public class HibernateDatabase implements Database {
 
   private HibernateInvoiceRepository repository;
+  private static Logger logger = LoggerFactory.getLogger(HibernateDatabase.class);
 
   @Autowired
   public HibernateDatabase(HibernateInvoiceRepository repository) throws IllegalArgumentException {
@@ -31,9 +34,12 @@ public class HibernateDatabase implements Database {
       throw new IllegalArgumentException("Invoice cannot be null");
     }
     try {
+      logger.debug("Saving invoice.");
       return repository.save(invoice);
     } catch (NonTransientDataAccessException e) {
-      throw new DatabaseOperationException(String.format("Encountered problems saving invoice: %s", invoice), e);
+      String message = String.format("Encountered problems saving invoice: %s");
+      logger.error(message);
+      throw new DatabaseOperationException(message, invoice, e);
     }
   }
 
@@ -43,9 +49,12 @@ public class HibernateDatabase implements Database {
       throw new IllegalArgumentException("Id cannot be null");
     }
     try {
+      logger.debug("Deleting invoice with following id: {}", id);
       repository.deleteById(id);
     } catch (EmptyResultDataAccessException e) {
-      throw new DatabaseOperationException(String.format("There was no invoice in database with id %s", id), e);
+      String message = String.format("Encountered problems looking for invoice: %s", id);
+      logger.debug(message);
+      throw new DatabaseOperationException(message, e);
     }
   }
 
@@ -55,27 +64,36 @@ public class HibernateDatabase implements Database {
       throw new IllegalArgumentException("Id cannot be null");
     }
     try {
+      logger.debug("Getting invoice with following id {}", id);
       return repository.findById(id);
     } catch (NoSuchElementException e) {
-      throw new DatabaseOperationException(String.format("Encountered problems while searching for invoice:, %s", id), e);
+      String message = String.format("Encountered problems while searching for invoice:, %s", id);
+      logger.error(message);
+      throw new DatabaseOperationException(message, e);
     }
   }
 
   @Override
   public Collection<Invoice> getAllInvoices() throws DatabaseOperationException {
     try {
+      logger.debug("Getting all invoices");
       return repository.findAll();
     } catch (NonTransientDataAccessException e) {
-      throw new DatabaseOperationException("Encountered problems while searching for invoices.", e);
+      String message = String.format("Encountered problems while searching for invoices.", e);
+      logger.error(message);
+      throw new DatabaseOperationException(message, e);
     }
   }
 
   @Override
   public void deleteAllInvoices() throws DatabaseOperationException {
     try {
+      logger.debug("Deleting all invoices");
       repository.deleteAll();
     } catch (NonTransientDataAccessException e) {
-      throw new DatabaseOperationException("Encountered problem while deleting invoices.", e);
+      String message = String.format("Encountered problem while deleting invoices.", e);
+      logger.error(message);
+      throw new DatabaseOperationException(message, e);
     }
   }
 
@@ -85,18 +103,24 @@ public class HibernateDatabase implements Database {
       throw new IllegalArgumentException("Id cannot be null.");
     }
     try {
+      logger.debug("Checking if invoice with following id: {} exists.", id);
       return repository.existsById(id);
     } catch (NonTransientDataAccessException e) {
-      throw new DatabaseOperationException(String.format("Encountered problems looking for invoice: %s", id), e);
+      String message = String.format("Encountered problems looking for invoice: %s", id);
+      logger.error(message);
+      throw new DatabaseOperationException(message, e);
     }
   }
 
   @Override
   public long countInvoices() throws DatabaseOperationException {
     try {
+      logger.debug("Counting invoices");
       return repository.count();
     } catch (NonTransientDataAccessException e) {
-      throw new DatabaseOperationException("Encountered problems while counting invoices.", e);
+      String message = String.format("Encountered problems while counting invoices.", e);
+      logger.error(message);
+      throw new DatabaseOperationException(message, e);
     }
   }
 }
