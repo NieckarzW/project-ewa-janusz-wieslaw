@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -290,19 +291,16 @@ class InvoiceServiceTest {
   @Test
   void shouldGetInvoiceByNumber() throws DatabaseOperationException, ServiceOperationException {
     //Given
-    List<Invoice> expectedInvoices = new ArrayList<>();
-    Invoice randomInvoice1 = InvoiceGenerator.getRandomInvoice();
-    Invoice randomInvoice2 = InvoiceGenerator.getRandomInvoice();
-    expectedInvoices.add(randomInvoice1);
-    expectedInvoices.add(randomInvoice2);
-    String invoice2Number = randomInvoice2.getNumber();
-    when(database.getAllInvoices()).thenReturn(expectedInvoices);
+    Invoice expectedInvoice = InvoiceGenerator.getRandomInvoice();
+    List<Invoice> invoicesInDatabase = Arrays.asList(InvoiceGenerator.getRandomInvoice(), expectedInvoice, InvoiceGenerator.getRandomInvoice());
+    when(database.getAllInvoices()).thenReturn(invoicesInDatabase);
 
     //When
-    Optional<Invoice> expectedInvoice = invoiceService.getInvoiceByNumber(invoice2Number);
+    Optional<Invoice> actualInvoice = invoiceService.getInvoiceByNumber(expectedInvoice.getNumber());
 
     //Then
-    assertEquals(Optional.ofNullable(randomInvoice2), expectedInvoice);
+    assertTrue(actualInvoice.isPresent());
+    assertEquals(expectedInvoice, actualInvoice.get());
     verify(database).getAllInvoices();
   }
 
