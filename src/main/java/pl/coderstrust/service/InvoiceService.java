@@ -14,8 +14,8 @@ import pl.coderstrust.model.Invoice;
 @Service
 public class InvoiceService {
 
-  private Database database;
   private static Logger logger = LoggerFactory.getLogger(InvoiceService.class);
+  private Database database;
 
   @Autowired
   public InvoiceService(Database database) {
@@ -34,14 +34,13 @@ public class InvoiceService {
       if (invoiceId != null && database.invoiceExists(invoiceId)) {
         throw new ServiceOperationException("Invoice with given id already exists in database.");
       }
-      logger.debug("Saving invoice.");
+      logger.debug("Saving invoice: {}", invoice);
       return database.saveInvoice(invoice);
 
     } catch (DatabaseOperationException e) {
-      String message = String.format("An error occurred while adding invoice.");
+      String message = String.format("Encountered problems while adding invoice: %s", invoice);
       logger.error(message);
       throw new ServiceOperationException(message, e);
-
     }
   }
 
@@ -54,10 +53,10 @@ public class InvoiceService {
       if (invoiceId == null || !database.invoiceExists(invoiceId)) {
         throw new ServiceOperationException("Given invoice doesn't exist in database.");
       }
-      logger.debug("Updating invoice.");
+      logger.debug("Updating invoice: {}", invoice);
       return database.saveInvoice(invoice);
     } catch (DatabaseOperationException e) {
-      String message = String.format("An error occurred while adding invoice.");
+      String message = String.format("An error occurred while updating invoice: %s", invoice);
       logger.error(message);
       throw new ServiceOperationException(message, e);
     }
@@ -73,7 +72,7 @@ public class InvoiceService {
       }
       database.deleteInvoice(id);
     } catch (DatabaseOperationException e) {
-      String message = String.format("An error occurred while deleting invoice.");
+      String message = String.format("An error occurred while deleting invoice: %s");
       logger.error(message);
       throw new ServiceOperationException(message, e);
     }
@@ -120,7 +119,7 @@ public class InvoiceService {
       throw new IllegalArgumentException("Id cannot be null.");
     }
     try {
-      logger.debug("Chcecking if invoice exists.");
+      logger.debug("Checking if invoice exists.");
       return database.invoiceExists(id);
     } catch (DatabaseOperationException e) {
       String message = String.format("An error occurred while checking if invoice exists.");

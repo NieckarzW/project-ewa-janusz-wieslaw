@@ -17,8 +17,8 @@ import pl.coderstrust.model.Invoice;
 @Repository
 public class HibernateDatabase implements Database {
 
-  private HibernateInvoiceRepository repository;
   private static Logger logger = LoggerFactory.getLogger(HibernateDatabase.class);
+  private HibernateInvoiceRepository repository;
 
   @Autowired
   public HibernateDatabase(HibernateInvoiceRepository repository) throws IllegalArgumentException {
@@ -34,10 +34,10 @@ public class HibernateDatabase implements Database {
       throw new IllegalArgumentException("Invoice cannot be null");
     }
     try {
-      logger.debug("Saving invoice.");
+      logger.debug("Saving invoice: {}", invoice);
       return repository.save(invoice);
     } catch (NonTransientDataAccessException e) {
-      String message = String.format("Encountered problems saving invoice: %s");
+      String message = String.format("Encountered problems while saving invoice: %s", invoice);
       logger.error(message);
       throw new DatabaseOperationException(message, invoice, e);
     }
@@ -91,7 +91,7 @@ public class HibernateDatabase implements Database {
       logger.debug("Deleting all invoices");
       repository.deleteAll();
     } catch (NonTransientDataAccessException e) {
-      String message = String.format("Encountered problem while deleting invoices.", e);
+      String message = "Encountered problem while deleting all invoices";
       logger.error(message);
       throw new DatabaseOperationException(message, e);
     }
@@ -106,7 +106,7 @@ public class HibernateDatabase implements Database {
       logger.debug("Checking if invoice with following id: {} exists.", id);
       return repository.existsById(id);
     } catch (NonTransientDataAccessException e) {
-      String message = String.format("Encountered problems looking for invoice: %s", id);
+      String message = String.format("Encountered problems while checking if invoice with following id: %d exists", id);
       logger.error(message);
       throw new DatabaseOperationException(message, e);
     }
