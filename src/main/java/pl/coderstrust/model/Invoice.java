@@ -20,8 +20,8 @@ public final class Invoice {
   private final Long id;
   private final String number;
   private final LocalDate issueDate;
-  @ManyToOne(cascade = CascadeType.ALL)
   private final LocalDate dueDate;
+  @ManyToOne(cascade = CascadeType.ALL)
   private final Company seller;
   @ManyToOne(cascade = CascadeType.ALL)
   private final Company buyer;
