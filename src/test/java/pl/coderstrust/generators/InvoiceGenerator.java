@@ -10,6 +10,15 @@ import pl.coderstrust.model.InvoiceEntry;
 
 public class InvoiceGenerator {
 
+  public static boolean invoicesAreSame(Invoice invoiceToAdd, Invoice addedInvoice) {
+    return (invoiceToAdd.getBuyer() == addedInvoice.getBuyer()
+        && invoiceToAdd.getSeller() == addedInvoice.getSeller()
+        && invoiceToAdd.getDueDate() == addedInvoice.getDueDate()
+        && invoiceToAdd.getIssueDate() == addedInvoice.getIssueDate()
+        && invoiceToAdd.getNumber().equals(addedInvoice.getNumber())
+        && invoiceToAdd.getEntries().equals(addedInvoice.getEntries()));
+  }
+
   public static Invoice getRandomInvoice() {
     long id = IdGenerator.getNextId();
     String number = WordGenerator.getRandomWord();
@@ -29,6 +38,5 @@ public class InvoiceGenerator {
         seller,
         buyer,
         entries);
-
   }
 }
