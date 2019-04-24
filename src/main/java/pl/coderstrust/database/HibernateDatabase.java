@@ -39,7 +39,7 @@ public class HibernateDatabase implements Database {
     } catch (NonTransientDataAccessException e) {
       String message = String.format("Encountered problems while saving invoice: %s", invoice);
       logger.error(message);
-      throw new DatabaseOperationException(message, invoice, e);
+      throw new DatabaseOperationException(message, e);
     }
   }
 
@@ -52,7 +52,7 @@ public class HibernateDatabase implements Database {
       logger.debug("Deleting invoice with following id: {}", id);
       repository.deleteById(id);
     } catch (EmptyResultDataAccessException e) {
-      String message = String.format("Encountered problems looking for invoice: %s", id);
+      String message = String.format("Encountered problems while removing invoice with following id: %d", id);
       logger.debug(message);
       throw new DatabaseOperationException(message, e);
     }
@@ -67,7 +67,7 @@ public class HibernateDatabase implements Database {
       logger.debug("Getting invoice with following id {}", id);
       return repository.findById(id);
     } catch (NoSuchElementException e) {
-      String message = String.format("Encountered problems while searching for invoice:, %s", id);
+      String message = String.format("Encountered problems while getting invoice with following id: %d", id);
       logger.error(message);
       throw new DatabaseOperationException(message, e);
     }
@@ -79,7 +79,7 @@ public class HibernateDatabase implements Database {
       logger.debug("Getting all invoices");
       return repository.findAll();
     } catch (NonTransientDataAccessException e) {
-      String message = String.format("Encountered problems while searching for invoices.", e);
+      String message = "Encountered problems while searching for invoices.";
       logger.error(message);
       throw new DatabaseOperationException(message, e);
     }
@@ -118,7 +118,7 @@ public class HibernateDatabase implements Database {
       logger.debug("Counting invoices");
       return repository.count();
     } catch (NonTransientDataAccessException e) {
-      String message = String.format("Encountered problems while counting invoices.", e);
+      String message = "Encountered problems while counting invoices.";
       logger.error(message);
       throw new DatabaseOperationException(message, e);
     }
