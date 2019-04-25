@@ -79,7 +79,7 @@ public class HibernateDatabase implements Database {
       logger.debug("Getting all invoices");
       return repository.findAll();
     } catch (NonTransientDataAccessException e) {
-      String message = "Encountered problems while searching for invoices.";
+      String message = "Encountered problems while getting all invoices.";
       logger.error(message);
       throw new DatabaseOperationException(message, e);
     }

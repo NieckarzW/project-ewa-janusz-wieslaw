@@ -56,7 +56,7 @@ public class InvoiceService {
       logger.debug("Updating invoice: {}", invoice);
       return database.saveInvoice(invoice);
     } catch (DatabaseOperationException e) {
-      String message = String.format("An error occurred while updating invoice: %s", invoice);
+      String message = String.format("Encountered problems while updating invoice: %s", invoice);
       logger.error(message);
       throw new ServiceOperationException(message, e);
     }
@@ -68,9 +68,13 @@ public class InvoiceService {
     }
     try {
       if (!database.invoiceExists(id)) {
-        throw new ServiceOperationException("Invoice with given id doesn't exist in database.");
+        String message = String.format("Invoice with following id: %d does not exist in database.", id);
+        logger.error(message);
+        throw new ServiceOperationException(message);
       }
       database.deleteInvoice(id);
+      logger.debug("Deleting invoice with following id: {}", id);
+
     } catch (DatabaseOperationException e) {
       String message = String.format("Encountered problems while removing invoice with following id: %d", id);
       logger.error(message);
@@ -83,7 +87,7 @@ public class InvoiceService {
       throw new IllegalArgumentException("Id cannot be null.");
     }
     try {
-      logger.debug("Getting an invoice");
+      logger.debug("Getting invoice with following id {}", id);
       return database.getInvoice(id);
     } catch (DatabaseOperationException e) {
       String message = String.format("Encountered problems while getting invoice with following id: %d", id);
@@ -119,10 +123,10 @@ public class InvoiceService {
       throw new IllegalArgumentException("Id cannot be null.");
     }
     try {
-      logger.debug("Checking invoice: {} exists", id);
+      logger.debug("Checking if invoice with following id: {} exists.", id);
       return database.invoiceExists(id);
     } catch (DatabaseOperationException e) {
-      String message = String.format("An error occurred while checking if invoice exists.", id);
+      String message = String.format("Encountered problems while checking if invoice exists.", id);
       logger.error(message);
       throw new ServiceOperationException(message, e);
     }
