@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.coderstrust.controller.InvoiceController;
 import pl.coderstrust.model.Invoice;
 
 public class InMemoryDatabase implements Database {
@@ -75,7 +74,7 @@ public class InMemoryDatabase implements Database {
     if (id == null) {
       throw new IllegalArgumentException("Id cannot be null");
     }
-    logger.debug("Checking if invoice with id: %s exists");
+    logger.debug("Checking if invoice with following id: {} exists.", id);
     return databaseStorage.containsKey(id);
   }
 
@@ -88,15 +87,15 @@ public class InMemoryDatabase implements Database {
   private Invoice insertInvoice(Invoice invoice) {
     Long id = nextId.incrementAndGet();
     Invoice insertedInvoice = new Invoice(id, invoice.getNumber(), invoice.getIssueDate(), invoice.getDueDate(), invoice.getSeller(), invoice.getBuyer(), invoice.getEntries());
+    logger.debug("Inserting invoice: %s", insertedInvoice);
     databaseStorage.put(id, insertedInvoice);
-    logger.debug("Inserting an invoice with id: %s", id);
     return insertedInvoice;
   }
 
   private Invoice updateInvoice(Invoice invoice) {
     Invoice updatedInvoice = new Invoice(invoice.getId(), invoice.getNumber(), invoice.getIssueDate(), invoice.getDueDate(), invoice.getSeller(), invoice.getBuyer(), invoice.getEntries());
+    logger.debug("Updating invoice %s", updatedInvoice);
     databaseStorage.put(invoice.getId(), updatedInvoice);
-    logger.debug("Updating an invoice with id: %s");
     return updatedInvoice;
   }
 }

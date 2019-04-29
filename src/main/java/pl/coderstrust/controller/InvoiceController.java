@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import pl.coderstrust.database.HibernateDatabase;
 import pl.coderstrust.model.Invoice;
 import pl.coderstrust.service.InvoiceService;
 import pl.coderstrust.service.ServiceOperationException;
@@ -45,7 +44,7 @@ public class InvoiceController {
       return new ResponseEntity<>(invoiceService.getAllInvoices(), HttpStatus.OK);
     } catch (ServiceOperationException e) {
       String message = String.format("An error occurred during getting all invoices.");
-      logger.error(message);
+      logger.error(message, e);
       return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -63,7 +62,7 @@ public class InvoiceController {
     } catch (ServiceOperationException e) {
       String message = String.format("An error occurred during getting invoice by id. Id: %d");
       logger.error(message);
-      return new ResponseEntity<>(String.format(message, id), HttpStatus.INTERNAL_SERVER_ERROR);
+      return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -74,7 +73,7 @@ public class InvoiceController {
       return new ResponseEntity<>("Number cannot be null.", HttpStatus.BAD_REQUEST);
     }
     try {
-      logger.debug("Getting invoice by number");
+      logger.debug("Getting invoice with following number: {}", number);
       Optional<Invoice> invoice = invoiceService.getInvoiceByNumber(number);
       if (invoice.isPresent()) {
         return new ResponseEntity<>(invoice.get(), HttpStatus.OK);
