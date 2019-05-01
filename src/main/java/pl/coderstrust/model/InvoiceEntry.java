@@ -2,6 +2,7 @@ package pl.coderstrust.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -15,11 +16,17 @@ public class InvoiceEntry {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private final Long id;
+  @ApiModelProperty(value = "productName", example = "Soda")
   private final String productName;
+  @ApiModelProperty(value = "quantity", example = "5")
   private final Long quantity;
+  @ApiModelProperty(value = "price", example = "2.99")
   private final BigDecimal price;
+  @ApiModelProperty(value = "vat value", example = "0.72")
   private final BigDecimal vatValue;
+  @ApiModelProperty(value = "gross value", example = "14.95")
   private final BigDecimal grossValue;
+  @ApiModelProperty(value = "Vat rate", example = "VAT_23")
   private final Vat vatRate;
 
   @JsonCreator
@@ -37,6 +44,16 @@ public class InvoiceEntry {
     this.vatValue = vatValue;
     this.grossValue = grossValue;
     this.vatRate = vatRate;
+  }
+
+  private InvoiceEntry() {
+    id = null;
+    productName = null;
+    quantity = null;
+    price = null;
+    vatValue = null;
+    grossValue = null;
+    vatRate = null;
   }
 
   public Long getId() {

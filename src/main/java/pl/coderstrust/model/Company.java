@@ -2,6 +2,7 @@ package pl.coderstrust.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,11 +15,17 @@ public class Company {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private final Long id;
+  @ApiModelProperty(value = "Company Name", example = "Coca-Cola")
   private final String name;
+  @ApiModelProperty(value = "Company Address", example = "Wersalska 47/75, 91-203 Łódź")
   private final String address;
+  @ApiModelProperty(value = "Tax Id", example = "524-21-06-963")
   private final String taxId;
+  @ApiModelProperty(value = "Account number", example = "PL 27 1140 2004 0000 3002 0135 5387")
   private final String accountNumber;
+  @ApiModelProperty(value = "Phone number", example = "(22) 519-55-55")
   private final String phoneNumber;
+  @ApiModelProperty(value = "email address", example = "cocacola@coke.com")
   private final String email;
 
   @JsonCreator
@@ -36,6 +43,16 @@ public class Company {
     this.accountNumber = accountNumber;
     this.phoneNumber = phoneNumber;
     this.email = email;
+  }
+
+  private Company() {
+    id = null;
+    name = null;
+    address = null;
+    taxId = null;
+    accountNumber = null;
+    phoneNumber = null;
+    email = null;
   }
 
   public Long getId() {

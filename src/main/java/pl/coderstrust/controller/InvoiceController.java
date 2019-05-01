@@ -1,5 +1,7 @@
 package pl.coderstrust.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ import pl.coderstrust.service.ServiceOperationException;
 
 @RestController
 @RequestMapping("/invoices")
+@Api(value = "/invoices", description = "Operations on invoices")
 public class InvoiceController {
 
   private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);
@@ -36,6 +39,9 @@ public class InvoiceController {
     this.invoiceService = invoiceService;
   }
 
+  @ApiOperation(value = "gets all invoices from database",
+      response = Invoice.class,
+      responseContainer = "List")
   @GetMapping(produces = "application/json")
   @ResponseBody
   public ResponseEntity<?> getAll() {
@@ -49,6 +55,8 @@ public class InvoiceController {
     }
   }
 
+  @ApiOperation(value = "Gets Invoice from database by ID",
+      response = Invoice.class)
   @GetMapping(path = "/{id}", produces = "application/json")
   @ResponseBody
   public ResponseEntity<?> getById(@PathVariable long id) {
@@ -66,6 +74,8 @@ public class InvoiceController {
     }
   }
 
+  @ApiOperation(value = "Gets Invoice from database by Number",
+      response = Invoice.class)
   @GetMapping(path = "/byNumber", produces = "application/json")
   @ResponseBody
   public ResponseEntity<?> getByNumber(@RequestParam String number) {
@@ -86,6 +96,9 @@ public class InvoiceController {
     }
   }
 
+  @ApiOperation(value = "Adds Invoice to database",
+      notes = "Invoice should have null ID. Use update to change existing Invoice",
+      response = Invoice.class)
   @PostMapping(produces = "application/json")
   public ResponseEntity<?> add(@RequestBody(required = false) Invoice invoice) {
     if (invoice == null) {
@@ -104,6 +117,9 @@ public class InvoiceController {
     }
   }
 
+  @ApiOperation(value = "Updates Invoice in database",
+      notes = "Invoice should have existing ID. Use add to create new Invoice",
+      response = Invoice.class)
   @PutMapping(path = "/{id}", produces = "application/json")
   public ResponseEntity update(@PathVariable("id") Long id, @RequestBody(required = false) Invoice invoice) {
     if (invoice == null) {
@@ -125,6 +141,8 @@ public class InvoiceController {
     }
   }
 
+  @ApiOperation(value = "Deletes Invoice from database",
+      notes = "Provide ID of invoice to remove")
   @DeleteMapping(path = "/{id}")
   public ResponseEntity<?> remove(@PathVariable long id) {
     try {
@@ -142,6 +160,7 @@ public class InvoiceController {
     }
   }
 
+  @ApiOperation(value = "Deletes all invoices in database")
   @DeleteMapping
   public ResponseEntity<?> removeAll() {
     try {

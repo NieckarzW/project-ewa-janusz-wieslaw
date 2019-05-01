@@ -2,7 +2,9 @@ package pl.coderstrust.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -20,8 +22,11 @@ public final class Invoice {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private final Long id;
+  @ApiModelProperty(value = "Invoice Number", example = "FV 2019/05/01/01")
   private final String number;
+  @ApiModelProperty(value = "Issue date", example = "2019-05-01")
   private final LocalDate issueDate;
+  @ApiModelProperty(value = "Due date", example = "2019-05-15")
   private final LocalDate dueDate;
   @ManyToOne(cascade = CascadeType.ALL)
   private final Company seller;
@@ -45,6 +50,16 @@ public final class Invoice {
     this.seller = seller;
     this.buyer = buyer;
     this.entries = entries;
+  }
+
+  private Invoice() {
+    id = null;
+    number = null;
+    issueDate = null;
+    dueDate = null;
+    seller = null;
+    buyer = null;
+    entries = new ArrayList<>();
   }
 
   public Long getId() {
