@@ -38,7 +38,7 @@ public class HibernateDatabase implements Database {
       return repository.save(invoice);
     } catch (NonTransientDataAccessException e) {
       String message = String.format("Encountered problems while saving invoice: %s", invoice);
-      logger.error(message);
+      logger.error(message, e);
       throw new DatabaseOperationException(message, e);
     }
   }
@@ -53,7 +53,7 @@ public class HibernateDatabase implements Database {
       repository.deleteById(id);
     } catch (EmptyResultDataAccessException e) {
       String message = String.format("Encountered problems while removing invoice with following id: %d", id);
-      logger.debug(message);
+      logger.debug(message, e);
       throw new DatabaseOperationException(message, e);
     }
   }
@@ -68,7 +68,7 @@ public class HibernateDatabase implements Database {
       return repository.findById(id);
     } catch (NoSuchElementException e) {
       String message = String.format("Encountered problems while getting invoice with following id: %d", id);
-      logger.error(message);
+      logger.error(message, e);
       throw new DatabaseOperationException(message, e);
     }
   }
@@ -80,7 +80,7 @@ public class HibernateDatabase implements Database {
       return repository.findAll();
     } catch (NonTransientDataAccessException e) {
       String message = "Encountered problems while getting all invoices.";
-      logger.error(message);
+      logger.error(message, e);
       throw new DatabaseOperationException(message, e);
     }
   }
@@ -92,7 +92,7 @@ public class HibernateDatabase implements Database {
       repository.deleteAll();
     } catch (NonTransientDataAccessException e) {
       String message = "Encountered problem while deleting all invoices";
-      logger.error(message);
+      logger.error(message, e);
       throw new DatabaseOperationException(message, e);
     }
   }
@@ -107,7 +107,7 @@ public class HibernateDatabase implements Database {
       return repository.existsById(id);
     } catch (NonTransientDataAccessException e) {
       String message = String.format("Encountered problems while checking if invoice with following id: %d exists", id);
-      logger.error(message);
+      logger.error(message, e);
       throw new DatabaseOperationException(message, e);
     }
   }
@@ -119,7 +119,7 @@ public class HibernateDatabase implements Database {
       return repository.count();
     } catch (NonTransientDataAccessException e) {
       String message = "Encountered problems while counting invoices.";
-      logger.error(message);
+      logger.error(message, e);
       throw new DatabaseOperationException(message, e);
     }
   }

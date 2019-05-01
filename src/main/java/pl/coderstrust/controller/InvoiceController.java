@@ -53,15 +53,15 @@ public class InvoiceController {
   @ResponseBody
   public ResponseEntity<?> getById(@PathVariable long id) {
     try {
-      logger.debug("Getting invoice with following id: %d", id);
+      logger.debug("Getting invoice with following id: {}", id);
       Optional<Invoice> invoice = invoiceService.getInvoice(id);
       if (invoice.isPresent()) {
         return new ResponseEntity<>(invoice.get(), HttpStatus.OK);
       }
       return new ResponseEntity<>(String.format("Invoice with %d id does not exist.", id), HttpStatus.NOT_FOUND);
     } catch (ServiceOperationException e) {
-      String message = String.format("An error occurred during getting invoice by id. Id: %d");
-      logger.error(message);
+      String message = String.format("An error occurred during getting invoice by id. Id: %d", id);
+      logger.error(message, e);
       return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -80,9 +80,9 @@ public class InvoiceController {
       }
       return new ResponseEntity<>(String.format("Invoice with %s number does not exist.", number), HttpStatus.NOT_FOUND);
     } catch (ServiceOperationException e) {
-      String message = String.format("An error occurred during getting invoice by number. Number: %s");
-      logger.error(message);
-      return new ResponseEntity<>(String.format(message, number), HttpStatus.INTERNAL_SERVER_ERROR);
+      String message = String.format("An error occurred during getting invoice by number. Number: %s", number);
+      logger.error(message, e);
+      return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -92,15 +92,15 @@ public class InvoiceController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invoice cannot be null.");
     }
     try {
-      logger.debug("Adding invoice.");
+      logger.debug("Adding invoice: {}", invoice);
       if (invoice.getId() != null && invoiceService.invoiceExists(invoice.getId())) {
         return new ResponseEntity<>("Invoice already exist.", HttpStatus.CONFLICT);
       }
       return new ResponseEntity(invoiceService.addInvoice(invoice), HttpStatus.OK);
     } catch (ServiceOperationException e) {
-      String message = String.format("An error occurred during adding invoice. Invoice: %s");
-      logger.error(message);
-      return new ResponseEntity<>(String.format(message, invoice), HttpStatus.INTERNAL_SERVER_ERROR);
+      String message = String.format("An error occurred during adding invoice. Invoice: %s", invoice);
+      logger.error(message, e);
+      return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -113,22 +113,22 @@ public class InvoiceController {
       return new ResponseEntity<>(String.format("Invoice to update has different id than %d.", id), HttpStatus.BAD_REQUEST);
     }
     try {
-      logger.debug("Updating invoice with following id: %d", id);
+      logger.debug("Updating invoice: {}", invoice);
       if (!invoiceService.invoiceExists(id)) {
         return new ResponseEntity<>(String.format("Invoice with %d id does not exist.", id), HttpStatus.NOT_FOUND);
       }
       return new ResponseEntity(invoiceService.updateInvoice(invoice), HttpStatus.OK);
     } catch (ServiceOperationException e) {
-      String message = String.format("An error occurred during updating invoice. Invoice id: %d, invoice: %s.");
-      logger.error(message);
-      return new ResponseEntity<>(String.format(message, id, invoice), HttpStatus.INTERNAL_SERVER_ERROR);
+      String message = String.format("An error occurred during updating invoice. Invoice id: %d, invoice: %s.", id, invoice);
+      logger.error(message, e);
+      return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @DeleteMapping(path = "/{id}")
   public ResponseEntity<?> remove(@PathVariable long id) {
     try {
-      logger.debug("Removing invoice with following id {}", id);
+      logger.debug("Removing invoice with following id: {}", id);
       Optional<Invoice> invoice = invoiceService.getInvoice(id);
       if (!invoice.isPresent()) {
         return new ResponseEntity<>(String.format("Invoice with %d id does not exist.", id), HttpStatus.NOT_FOUND);
@@ -136,9 +136,9 @@ public class InvoiceController {
       invoiceService.deleteInvoice(id);
       return new ResponseEntity(invoice, HttpStatus.OK);
     } catch (ServiceOperationException e) {
-      String message = String.format("An error occurred during removing invoice. Invoice id: %d,");
-      logger.error(message);
-      return new ResponseEntity<>(String.format(message, id), HttpStatus.INTERNAL_SERVER_ERROR);
+      String message = String.format("An error occurred during removing invoice. Invoice id: %d", id);
+      logger.error(message, e);
+      return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -150,7 +150,7 @@ public class InvoiceController {
       return new ResponseEntity(HttpStatus.NO_CONTENT);
     } catch (ServiceOperationException e) {
       String message = String.format("An error occurred during removing all invoices.");
-      logger.error(message);
+      logger.error(message, e);
       return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

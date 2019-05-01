@@ -36,7 +36,6 @@ public class InvoiceService {
       }
       logger.debug("Adding invoice: {}", invoice);
       return database.saveInvoice(invoice);
-
     } catch (DatabaseOperationException e) {
       String message = String.format("Encountered problems while adding invoice: %s", invoice);
       logger.error(message);
@@ -126,7 +125,7 @@ public class InvoiceService {
       logger.debug("Checking if invoice with following id: {} exists.", id);
       return database.invoiceExists(id);
     } catch (DatabaseOperationException e) {
-      String message = String.format("Encountered problems while checking if invoice exists.", id);
+      String message = String.format("Encountered problems while checking if invoice with following id: %d exists", id);
       logger.error(message);
       throw new ServiceOperationException(message, e);
     }
