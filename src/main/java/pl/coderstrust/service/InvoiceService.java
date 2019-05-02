@@ -30,15 +30,15 @@ public class InvoiceService {
       throw new IllegalArgumentException("Invoice cannot be null.");
     }
     try {
+      logger.debug("Adding invoice: {}", invoice);
       Long invoiceId = invoice.getId();
       if (invoiceId != null && database.invoiceExists(invoiceId)) {
         throw new ServiceOperationException("Invoice with given id already exists in database.");
       }
-      logger.debug("Adding invoice: {}", invoice);
       return database.saveInvoice(invoice);
     } catch (DatabaseOperationException e) {
       String message = String.format("Encountered problems while adding invoice: %s", invoice);
-      logger.error(message);
+      logger.error(message, e);
       throw new ServiceOperationException(message, e);
     }
   }
@@ -48,15 +48,15 @@ public class InvoiceService {
       throw new IllegalArgumentException("Invoice cannot be null.");
     }
     try {
+      logger.debug("Updating invoice: {}", invoice);
       Long invoiceId = invoice.getId();
       if (invoiceId == null || !database.invoiceExists(invoiceId)) {
         throw new ServiceOperationException("Given invoice doesn't exist in database.");
       }
-      logger.debug("Updating invoice: {}", invoice);
       return database.saveInvoice(invoice);
     } catch (DatabaseOperationException e) {
       String message = String.format("Encountered problems while updating invoice: %s", invoice);
-      logger.error(message);
+      logger.error(message, e);
       throw new ServiceOperationException(message, e);
     }
   }
@@ -66,17 +66,16 @@ public class InvoiceService {
       throw new IllegalArgumentException("Id cannot be null.");
     }
     try {
+      logger.debug("Deleting invoice with following id: {}", id);
       if (!database.invoiceExists(id)) {
         String message = String.format("Invoice with following id: %d does not exist in database.", id);
         logger.error(message);
         throw new ServiceOperationException(message);
       }
       database.deleteInvoice(id);
-      logger.debug("Deleting invoice with following id: {}", id);
-
     } catch (DatabaseOperationException e) {
       String message = String.format("Encountered problems while removing invoice with following id: %d", id);
-      logger.error(message);
+      logger.error(message, e);
       throw new ServiceOperationException(message, e);
     }
   }
@@ -90,7 +89,7 @@ public class InvoiceService {
       return database.getInvoice(id);
     } catch (DatabaseOperationException e) {
       String message = String.format("Encountered problems while getting invoice with following id: %d", id);
-      logger.error(message);
+      logger.error(message, e);
       throw new ServiceOperationException(message, e);
     }
   }
@@ -101,18 +100,18 @@ public class InvoiceService {
       return database.getAllInvoices();
     } catch (DatabaseOperationException e) {
       String message = "Encountered problems while getting all invoices";
-      logger.error(message);
+      logger.error(message, e);
       throw new ServiceOperationException(message, e);
     }
   }
 
   public void deleteAllInvoices() throws ServiceOperationException {
     try {
-      database.deleteAllInvoices();
       logger.debug("Deleting all invoices");
+      database.deleteAllInvoices();
     } catch (DatabaseOperationException e) {
       String message = "Encountered problem while deleting all invoices";
-      logger.error(message);
+      logger.error(message, e);
       throw new ServiceOperationException(message, e);
     }
   }
@@ -126,7 +125,7 @@ public class InvoiceService {
       return database.invoiceExists(id);
     } catch (DatabaseOperationException e) {
       String message = String.format("Encountered problems while checking if invoice with following id: %d exists", id);
-      logger.error(message);
+      logger.error(message, e);
       throw new ServiceOperationException(message, e);
     }
   }

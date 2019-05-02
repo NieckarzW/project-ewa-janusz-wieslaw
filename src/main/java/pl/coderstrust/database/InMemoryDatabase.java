@@ -25,10 +25,10 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public synchronized Invoice saveInvoice(Invoice invoice) {
-    logger.debug("Saving invoice: {}", invoice);
     if (invoice == null) {
       throw new IllegalArgumentException("Invoice cannot be null");
     }
+    logger.debug("Saving invoice: {}", invoice);
     if (invoice.getId() == null || !databaseStorage.containsKey(invoice.getId())) {
       return insertInvoice(invoice);
     }
@@ -40,10 +40,10 @@ public class InMemoryDatabase implements Database {
     if (id == null) {
       throw new IllegalArgumentException("Id cannot be null");
     }
+    logger.debug("Deleting an invoice with id: %s", id);
     if (!databaseStorage.containsKey(id)) {
       throw new DatabaseOperationException(String.format("There was no invoice in database with id: %s", id));
     }
-    logger.debug("Deleting an invoice with id: %s", id);
     databaseStorage.remove(id);
   }
 
