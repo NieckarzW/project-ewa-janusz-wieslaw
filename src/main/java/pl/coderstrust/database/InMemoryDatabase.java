@@ -40,7 +40,7 @@ public class InMemoryDatabase implements Database {
     if (id == null) {
       throw new IllegalArgumentException("Id cannot be null");
     }
-    logger.debug("Deleting an invoice with id: %s", id);
+    logger.debug("Deleting an invoice with id:{}", id);
     if (!databaseStorage.containsKey(id)) {
       throw new DatabaseOperationException(String.format("There was no invoice in database with id: %s", id));
     }
@@ -86,14 +86,14 @@ public class InMemoryDatabase implements Database {
   private Invoice insertInvoice(Invoice invoice) {
     Long id = nextId.incrementAndGet();
     Invoice insertedInvoice = new Invoice(id, invoice.getNumber(), invoice.getIssueDate(), invoice.getDueDate(), invoice.getSeller(), invoice.getBuyer(), invoice.getEntries());
-    logger.debug("Inserting invoice: %s", insertedInvoice);
+    logger.debug("Inserting invoice: {}", insertedInvoice);
     databaseStorage.put(id, insertedInvoice);
     return insertedInvoice;
   }
 
   private Invoice updateInvoice(Invoice invoice) {
     Invoice updatedInvoice = new Invoice(invoice.getId(), invoice.getNumber(), invoice.getIssueDate(), invoice.getDueDate(), invoice.getSeller(), invoice.getBuyer(), invoice.getEntries());
-    logger.debug("Updating invoice %s", updatedInvoice);
+    logger.debug("Updating invoice {}", updatedInvoice);
     databaseStorage.put(invoice.getId(), updatedInvoice);
     return updatedInvoice;
   }

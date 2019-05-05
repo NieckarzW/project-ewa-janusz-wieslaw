@@ -135,12 +135,15 @@ public class InvoiceService {
       throw new IllegalArgumentException("Number cannot be null.");
     }
     try {
+      logger.debug("Getting invoice with following number {}", number);
       return database.getAllInvoices()
           .stream()
           .filter(invoice -> invoice.getNumber().equals(number))
           .findFirst();
     } catch (DatabaseOperationException e) {
-      throw new ServiceOperationException("An error occurred while retrieving invoice by number.", e);
+      String message = String.format("An error occurred while retrieving invoice by number.", number);
+      logger.error(message, e);
+      throw new ServiceOperationException(message, e);
     }
   }
 }
