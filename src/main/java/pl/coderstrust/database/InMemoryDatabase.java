@@ -40,7 +40,7 @@ public class InMemoryDatabase implements Database {
     if (id == null) {
       throw new IllegalArgumentException("Id cannot be null");
     }
-    logger.debug("Deleting an invoice with id:{}", id);
+    logger.debug("Deleting an invoice with id: {}", id);
     if (!databaseStorage.containsKey(id)) {
       throw new DatabaseOperationException(String.format("There was no invoice in database with id: %s", id));
     }
