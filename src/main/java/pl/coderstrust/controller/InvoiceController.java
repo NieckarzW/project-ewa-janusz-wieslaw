@@ -25,7 +25,7 @@ import pl.coderstrust.service.ServiceOperationException;
 
 @RestController
 @RequestMapping("/invoices")
-@Api(value = "/invoices", description = "Operations on invoices")
+@Api(value = "/invoices", description = "Available operations for invoice application\", tags = {\"Invoices\"}")
 public class InvoiceController {
 
   private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);

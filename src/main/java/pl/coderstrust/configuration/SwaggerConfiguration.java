@@ -1,8 +1,10 @@
 package pl.coderstrust.configuration;
 
+import io.swagger.annotations.Api;
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -18,19 +20,20 @@ public class SwaggerConfiguration {
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
-        .apis(RequestHandlerSelectors.basePackage("pl.coderstrust"))
-        .paths(PathSelectors.any())
+        .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+        .paths(PathSelectors.ant("/invoices/**"))
         .build()
+        .consumes(Collections.singleton("application/json"))
+        .produces(Collections.singleton("application/json"))
         .apiInfo(apiInfo());
   }
 
   private ApiInfo apiInfo() {
-    return new ApiInfo(
-        "Project 10 REST API",
-        "This API includes methods to add, update, get and delete invoices.",
-        "1.0",
-        "Terms of service",
-        new Contact("Ewa Wiesław Janusz", "www.invoices.com", "EwaJanusWieslaw@o2.pl"),
-        "License of API", "API license URL", Collections.emptyList());
+    return new ApiInfoBuilder()
+        .title("Invoices REST API")
+        .description("This API provides simple functionality to save, update, delete, search for your invoices.")
+        .version("1.0.0")
+        .contact(new Contact("Ewa Wiesław Janusz", "www.invoices.com", "EwaJanusWieslaw@o2.pl"))
+        .build();
   }
 }
