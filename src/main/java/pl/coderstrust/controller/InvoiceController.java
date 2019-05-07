@@ -166,7 +166,7 @@ public class InvoiceController {
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Delete an invoice by id", response = Invoice.class)
   @ApiImplicitParam(name = "id", value = "Only digits possible, e.g. 7565", example = "7865", dataType = "Long")
-  @ApiResponses({
+  @ApiResponses( {
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 404, message = "Invoice not found for passed id."),
       @ApiResponse(code = 500, message = "Internal server error.")})
