@@ -16,18 +16,19 @@ public class Company {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @ApiModelProperty(value = "The id of company.", dataType = "Long", position = -1)
   private final Long id;
-  @ApiModelProperty(value = "Company Name", example = "Coca-Cola")
+  @ApiModelProperty(value = "Company name", example = "Coca-Cola")
   private final String name;
-  @ApiModelProperty(value = "Company Address", example = "Wersalska 47/75, 91-203 Łódź")
+  @ApiModelProperty(value = "Company address", example = "Wersalska 47/75, 91-203 Łódź")
   private final String address;
-  @ApiModelProperty(value = "Tax Id", example = "524-21-06-963")
+  @ApiModelProperty(value = "Tax identifier", example = "524-21-06-963")
   private final String taxId;
   @ApiModelProperty(value = "Account number", example = "PL 27 1140 2004 0000 3002 0135 5387")
   private final String accountNumber;
   @ApiModelProperty(value = "Phone number", example = "(22) 519-55-55")
   private final String phoneNumber;
-  @ApiModelProperty(value = "email address", example = "cocacola@coke.com")
+  @ApiModelProperty(value = "Email address", example = "cocacola@coke.com")
   private final String email;
 
   @JsonCreator

@@ -17,14 +17,15 @@ public class InvoiceEntry {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @ApiModelProperty(value = "The id of invoice entry.", dataType = "Long", position = -1)
   private final Long id;
-  @ApiModelProperty(value = "productName", example = "Soda")
+  @ApiModelProperty(value = "Product name", example = "Soda")
   private final String productName;
-  @ApiModelProperty(value = "quantity", example = "5")
+  @ApiModelProperty(value = "Product quantity", example = "5")
   private final Long quantity;
-  @ApiModelProperty(value = "price", example = "2.99")
+  @ApiModelProperty(value = "Product net price per unit", example = "2.99")
   private final BigDecimal price;
-  @ApiModelProperty(value = "vat value", example = "0.72")
+  @ApiModelProperty(value = "Value of VAT", example = "0.72")
   private final BigDecimal vatValue;
   @ApiModelProperty(value = "Value of all items with VAT value", example = "14.95")
   private final BigDecimal grossValue;
