@@ -28,7 +28,7 @@ import pl.coderstrust.service.ServiceOperationException;
 
 @RestController
 @RequestMapping("/invoices")
-@Api(value = "/invoices", description = "Available operations for invoice application", tags = {"Invoices"})
+@Api(value = "/invoices", tags = {"Invoices"})
 public class InvoiceController {
 
   private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);
@@ -136,6 +136,7 @@ public class InvoiceController {
   @PutMapping(path = "/{id}", produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Update existing invoice.", response = Invoice.class)
+  @ApiImplicitParam(name = "id", value = "Only digits possible, e.g. 7565", example = "7865", dataType = "Long")
   @ApiResponses({
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 400, message = "Passed data is invalid."),

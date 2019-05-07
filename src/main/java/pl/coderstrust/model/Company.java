@@ -16,7 +16,7 @@ public class Company {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @ApiModelProperty(value = "The id of company.", dataType = "Long", position = -1)
+  @ApiModelProperty(value = "The id of company.", example = "1", dataType = "Long", position = -1)
   private final Long id;
   @ApiModelProperty(value = "Company name", example = "Coca-Cola")
   private final String name;

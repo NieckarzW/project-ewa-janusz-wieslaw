@@ -25,7 +25,7 @@ public final class Invoice {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @ApiModelProperty(value = "The id of invoice.", example = "1234", dataType = "Long", position = -1)
   private final Long id;
-  @ApiModelProperty(value = "Invoice Number", example = "FV 2019/05/01/01")
+  @ApiModelProperty(value = "Invoice number", example = "FV 2019/05/01/01")
   private final String number;
   @ApiModelProperty(value = "Issue date", example = "2019-05-01")
   private final LocalDate issueDate;
