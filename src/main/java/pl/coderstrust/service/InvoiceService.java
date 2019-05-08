@@ -141,7 +141,7 @@ public class InvoiceService {
           .filter(invoice -> invoice.getNumber().equals(number))
           .findFirst();
     } catch (DatabaseOperationException e) {
-      String message = String.format("An error occurred while retrieving invoice by number.", number);
+      String message = String.format("Encountered problems while getting invoice with following number: %s", number);
       logger.error(message, e);
       throw new ServiceOperationException(message, e);
     }
