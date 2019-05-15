@@ -3,7 +3,6 @@ package pl.coderstrust.database;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -90,7 +89,7 @@ public class InFileDatabase implements Database {
   }
 
   @Override
-  public synchronized Collection<Invoice> getAllInvoices() throws DatabaseOperationException {
+  public synchronized List<Invoice> getAllInvoices() throws DatabaseOperationException {
     try {
       return getInvoices();
     } catch (IOException e) {
