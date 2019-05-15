@@ -1,7 +1,9 @@
 package pl.coderstrust.database;
 
 import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.stereotype.Component;
 
+@Component
 public class IdentifierGenerator {
 
   private AtomicLong identifier;
