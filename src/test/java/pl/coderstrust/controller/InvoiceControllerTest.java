@@ -16,11 +16,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.coderstrust.generators.InvoiceGenerator;
 import pl.coderstrust.model.Invoice;
+import pl.coderstrust.service.InvoicePdfService;
 import pl.coderstrust.service.InvoiceEmailService;
 import pl.coderstrust.service.InvoiceService;
 import pl.coderstrust.service.ServiceOperationException;
@@ -51,16 +53,24 @@ class InvoiceControllerTest {
   private InvoiceService invoiceService;
 
   @MockBean
+  private InvoicePdfService invoicePdfService;
+
+  @MockBean
   private InvoiceEmailService invoiceEmailService;
 
   @Test
   void shouldThrowIllegalArgumentExceptionForNullAsInvoiceService() {
-    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(null, invoiceEmailService));
+    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(null, invoicePdfService, invoiceEmailService));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionForNullAsInvoicePdfService() {
+    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(invoiceService, null, invoiceEmailService);
   }
 
   @Test
   void shouldThrowIllegalArgumentExceptionForNullAsInvoiceEmailService() {
-    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(invoiceService, null));
+    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(invoiceService, invoicePdfService, null));
   }
 
   @Test
@@ -71,8 +81,8 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(get("/invoices"))
-        .andExpect(status().isOk())
-        .andExpect(content().json(mapper.writeValueAsString(invoices)));
+            .andExpect(status().isOk())
+            .andExpect(content().json(mapper.writeValueAsString(invoices)));
 
     verify(invoiceService).getAllInvoices();
   }
@@ -85,8 +95,8 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(get("/invoices"))
-        .andExpect(status().isOk())
-        .andExpect(content().json(mapper.writeValueAsString(invoices)));
+            .andExpect(status().isOk())
+            .andExpect(content().json(mapper.writeValueAsString(invoices)));
 
     verify(invoiceService).getAllInvoices();
   }
@@ -98,7 +108,7 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(get("/invoices"))
-        .andExpect(status().isInternalServerError());
+            .andExpect(status().isInternalServerError());
 
     verify(invoiceService).getAllInvoices();
   }
@@ -111,8 +121,8 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(get("/invoices/1"))
-        .andExpect(status().isOk())
-        .andExpect(content().json(mapper.writeValueAsString(invoice)));
+            .andExpect(status().isOk())
+            .andExpect(content().json(mapper.writeValueAsString(invoice)));
 
     verify(invoiceService).getInvoice(1L);
   }
@@ -124,7 +134,7 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(get("/invoices/1"))
-        .andExpect(status().isNotFound());
+            .andExpect(status().isNotFound());
 
     verify(invoiceService).getInvoice(1L);
   }
@@ -136,7 +146,7 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(get("/invoices/1"))
-        .andExpect(status().isInternalServerError());
+            .andExpect(status().isInternalServerError());
 
     verify(invoiceService).getInvoice(1L);
   }
@@ -149,8 +159,8 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(get("/invoices/byNumber?number=1111"))
-        .andExpect(status().isOk())
-        .andExpect(content().json(mapper.writeValueAsString(invoice)));
+            .andExpect(status().isOk())
+            .andExpect(content().json(mapper.writeValueAsString(invoice)));
 
     verify(invoiceService).getInvoiceByNumber("1111");
   }
@@ -162,7 +172,7 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(get("/invoices/byNumber?number=1111"))
-        .andExpect(status().isNotFound());
+            .andExpect(status().isNotFound());
 
     verify(invoiceService).getInvoiceByNumber("1111");
   }
@@ -174,7 +184,7 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(get("/invoices/byNumber?number=1111"))
-        .andExpect(status().isInternalServerError());
+            .andExpect(status().isInternalServerError());
 
     verify(invoiceService).getInvoiceByNumber("1111");
   }
@@ -182,7 +192,7 @@ class InvoiceControllerTest {
   @Test
   void shouldReturnBadRequestStatusDuringGettingInvoiceByNumberWhenNumberIsNull() throws Exception {
     mvc.perform(get("/invoices/byNumber"))
-        .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest());
 
     verify(invoiceService, never()).getInvoiceByNumber(anyString());
   }
@@ -197,10 +207,10 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(post("/invoices")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(invoice)))
-        .andExpect(status().isOk())
-        .andExpect(content().json(mapper.writeValueAsString(invoice)));
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(invoice)))
+            .andExpect(status().isOk())
+            .andExpect(content().json(mapper.writeValueAsString(invoice)));
 
     verify(invoiceService).invoiceExists(invoice.getId());
     verify(invoiceService).addInvoice(invoice);
@@ -215,9 +225,9 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(post("/invoices")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(invoice)))
-        .andExpect(status().isConflict());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(invoice)))
+            .andExpect(status().isConflict());
 
     verify(invoiceService).invoiceExists(invoice.getId());
     verify(invoiceService, never()).addInvoice(invoice);
@@ -227,9 +237,9 @@ class InvoiceControllerTest {
   @Test
   void shouldReturnBadRequestStatusDuringAddingInvoiceWhenInvoiceIsNull() throws Exception {
     mvc.perform(post("/invoices")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(null)))
-        .andExpect(status().isBadRequest());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(null)))
+            .andExpect(status().isBadRequest());
 
     verify(invoiceService, never()).invoiceExists(anyLong());
     verify(invoiceService, never()).addInvoice(any());
@@ -244,9 +254,9 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(post("/invoices")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(invoice)))
-        .andExpect(status().isInternalServerError());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(invoice)))
+            .andExpect(status().isInternalServerError());
 
     verify(invoiceService).invoiceExists(invoice.getId());
     verify(invoiceService).addInvoice(invoice);
@@ -261,11 +271,11 @@ class InvoiceControllerTest {
     when(invoiceService.updateInvoice(invoice)).thenReturn(invoice);
 
     //then
-    mvc.perform(put(String.format("/invoices/%d", invoice.getId()))
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(invoice)))
-        .andExpect(status().isOk())
-        .andExpect(content().json(mapper.writeValueAsString(invoice)));
+    mvc.perform(put("/invoices/{id}", invoice.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(invoice)))
+            .andExpect(status().isOk())
+            .andExpect(content().json(mapper.writeValueAsString(invoice)));
 
     verify(invoiceService).invoiceExists(invoice.getId());
     verify(invoiceService).updateInvoice(invoice);
@@ -274,9 +284,9 @@ class InvoiceControllerTest {
   @Test
   void shouldReturnBadRequestStatusDuringUpdatingInvoiceWhenInvoiceIsNull() throws Exception {
     mvc.perform(put("/invoices/1")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(null)))
-        .andExpect(status().isBadRequest());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(null)))
+            .andExpect(status().isBadRequest());
 
     verify(invoiceService, never()).invoiceExists(anyLong());
     verify(invoiceService, never()).updateInvoice(any());
@@ -288,10 +298,10 @@ class InvoiceControllerTest {
     Invoice invoice = InvoiceGenerator.getRandomInvoice();
 
     //then
-    mvc.perform(put(String.format("/invoices/%d", invoice.getId() + 1))
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(invoice)))
-        .andExpect(status().isBadRequest());
+    mvc.perform(put("/invoices/{id}", invoice.getId() + 1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(invoice)))
+            .andExpect(status().isBadRequest());
 
     verify(invoiceService, never()).invoiceExists(anyLong());
     verify(invoiceService, never()).updateInvoice(any());
@@ -305,10 +315,10 @@ class InvoiceControllerTest {
     when(invoiceService.invoiceExists(invoice.getId())).thenReturn(false);
 
     //then
-    mvc.perform(put(String.format("/invoices/%d", invoice.getId()))
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(invoice)))
-        .andExpect(status().isNotFound());
+    mvc.perform(put("/invoices/{id}", invoice.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(invoice)))
+            .andExpect(status().isNotFound());
 
     verify(invoiceService).invoiceExists(invoice.getId());
     verify(invoiceService, never()).updateInvoice(any());
@@ -322,10 +332,10 @@ class InvoiceControllerTest {
     doThrow(ServiceOperationException.class).when(invoiceService).updateInvoice(invoice);
 
     //then
-    mvc.perform(put(String.format("/invoices/%d", invoice.getId()))
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(mapper.writeValueAsString(invoice)))
-        .andExpect(status().isInternalServerError());
+    mvc.perform(put("/invoices/{id}", invoice.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(invoice)))
+            .andExpect(status().isInternalServerError());
 
     verify(invoiceService).invoiceExists(invoice.getId());
     verify(invoiceService).updateInvoice(invoice);
@@ -340,8 +350,8 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(delete("/invoices/1"))
-        .andExpect(status().isOk())
-        .andExpect(content().json(mapper.writeValueAsString(invoice)));
+            .andExpect(status().isOk())
+            .andExpect(content().json(mapper.writeValueAsString(invoice)));
 
     verify(invoiceService).getInvoice(1L);
     verify(invoiceService).deleteInvoice(1L);
@@ -354,7 +364,7 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(delete("/invoices/1"))
-        .andExpect(status().isNotFound());
+            .andExpect(status().isNotFound());
 
     verify(invoiceService).getInvoice(1L);
     verify(invoiceService, never()).deleteInvoice(1L);
@@ -369,7 +379,7 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(delete("/invoices/1"))
-        .andExpect(status().isInternalServerError());
+            .andExpect(status().isInternalServerError());
 
     verify(invoiceService).getInvoice(1L);
     verify(invoiceService).deleteInvoice(1L);
@@ -382,7 +392,7 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(delete("/invoices"))
-        .andExpect(status().isNoContent());
+            .andExpect(status().isNoContent());
 
     verify(invoiceService).deleteAllInvoices();
   }
@@ -394,8 +404,60 @@ class InvoiceControllerTest {
 
     //then
     mvc.perform(delete("/invoices"))
-        .andExpect(status().isInternalServerError());
+            .andExpect(status().isInternalServerError());
 
     verify(invoiceService).deleteAllInvoices();
+  }
+
+  @Test
+  void shouldReturnInvoiceAsPdf() throws Exception {
+    //Given
+    Invoice invoice = InvoiceGenerator.getRandomInvoice();
+    byte[] expectedByteArray = new byte[10];
+    when(invoiceService.getInvoice(invoice.getId())).thenReturn(Optional.ofNullable(invoice));
+    when(invoicePdfService.getInvoiceAsPdf(invoice)).thenReturn(expectedByteArray);
+
+    //When
+    mvc.perform(get("/invoices/pdf/{id}", invoice.getId())
+            .accept(MediaType.APPLICATION_PDF))
+            .andExpect(status().isOk())
+            .andExpect(content().bytes(expectedByteArray));
+
+    //Then
+    verify(invoiceService).getInvoice(invoice.getId());
+    verify(invoicePdfService).getInvoiceAsPdf(invoice);
+  }
+
+  @Test
+  void shouldReturnNotFoundDuringGettingInvoiceAsPdfWhenInvoiceDoesNotExist() throws Exception {
+    //Given
+    Long invoiceId = 10L;
+    when(invoiceService.getInvoice(invoiceId)).thenReturn(Optional.empty());
+
+    //When
+    mvc.perform(get("/invoices/pdf/{id}", invoiceId)
+            .accept(MediaType.APPLICATION_PDF))
+            .andExpect(status().isNotFound());
+
+    //Then
+    verify(invoiceService).getInvoice(invoiceId);
+    verify(invoicePdfService, never()).getInvoiceAsPdf(any());
+  }
+
+  @Test
+  void shouldReturnInternalServerErrorDuringGettingInvoiceAsPdfWhenSomethingWentWrongOnServer() throws Exception {
+    //Given
+    Invoice invoice = InvoiceGenerator.getRandomInvoice();
+    when(invoiceService.getInvoice(invoice.getId())).thenReturn(Optional.ofNullable(invoice));
+    when(invoicePdfService.getInvoiceAsPdf(invoice)).thenThrow(ServiceOperationException.class);
+
+    //When
+    mvc.perform(get("/invoices/pdf/{id}", invoice.getId())
+            .accept(MediaType.APPLICATION_PDF))
+            .andExpect(status().isInternalServerError());
+
+    //Then
+    verify(invoiceService).getInvoice(invoice.getId());
+    verify(invoicePdfService).getInvoiceAsPdf(invoice);
   }
 }
