@@ -49,7 +49,7 @@ class InvoiceControllerTest {
 
   @Test
   void shouldThrowIllegalArgumentExceptionForNullAsInvoiceService() {
-    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(null));
+    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(null, null));
   }
 
   @Test
