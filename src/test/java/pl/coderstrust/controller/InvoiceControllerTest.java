@@ -32,6 +32,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.coderstrust.generators.InvoiceGenerator;
 import pl.coderstrust.model.Invoice;
+import pl.coderstrust.service.InvoiceEmailService;
 import pl.coderstrust.service.InvoiceService;
 import pl.coderstrust.service.ServiceOperationException;
 
@@ -49,9 +50,17 @@ class InvoiceControllerTest {
   @MockBean
   private InvoiceService invoiceService;
 
+  @MockBean
+  private InvoiceEmailService invoiceEmailService;
+
   @Test
   void shouldThrowIllegalArgumentExceptionForNullAsInvoiceService() {
-    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(null));
+    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(null, invoiceEmailService));
+  }
+
+  @Test
+  void shouldThrowIllegalArgumentExceptionForNullAsInvoiceEmailService() {
+    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(invoiceService, null));
   }
 
   @Test
@@ -184,6 +193,7 @@ class InvoiceControllerTest {
     Invoice invoice = InvoiceGenerator.getRandomInvoice();
     when(invoiceService.invoiceExists(invoice.getId())).thenReturn(false);
     when(invoiceService.addInvoice(invoice)).thenReturn(invoice);
+    doNothing().when(invoiceEmailService).sendEmailWithInvoice(invoice);
 
     //then
     mvc.perform(post("/invoices")
@@ -194,6 +204,7 @@ class InvoiceControllerTest {
 
     verify(invoiceService).invoiceExists(invoice.getId());
     verify(invoiceService).addInvoice(invoice);
+    verify(invoiceEmailService).sendEmailWithInvoice(invoice);
   }
 
   @Test
@@ -210,6 +221,7 @@ class InvoiceControllerTest {
 
     verify(invoiceService).invoiceExists(invoice.getId());
     verify(invoiceService, never()).addInvoice(invoice);
+    verify(invoiceEmailService, never()).sendEmailWithInvoice(any(Invoice.class));
   }
 
   @Test
@@ -221,6 +233,7 @@ class InvoiceControllerTest {
 
     verify(invoiceService, never()).invoiceExists(anyLong());
     verify(invoiceService, never()).addInvoice(any());
+    verify(invoiceEmailService, never()).sendEmailWithInvoice(any(Invoice.class));
   }
 
   @Test
@@ -237,6 +250,7 @@ class InvoiceControllerTest {
 
     verify(invoiceService).invoiceExists(invoice.getId());
     verify(invoiceService).addInvoice(invoice);
+    verify(invoiceEmailService, never()).sendEmailWithInvoice(any(Invoice.class));
   }
 
   @Test

@@ -35,7 +35,7 @@ public class InvoiceEmailService {
   @Async
   public void sendEmailWithInvoice(Invoice invoice) {
     if (invoice == null) {
-      throw new IllegalArgumentException(("Invoice cannot be null"));
+      throw new IllegalArgumentException("Invoice cannot be null");
     }
     logger.debug("Sending an email with invoice: {}", invoice);
     try {
