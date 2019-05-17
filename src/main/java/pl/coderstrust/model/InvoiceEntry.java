@@ -17,7 +17,7 @@ public class InvoiceEntry {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @ApiModelProperty(value = "The id of invoice entry.", example = "1", dataType = "Long", position = -1)
+  @ApiModelProperty(value = "The id of invoice entry.", dataType = "Long", position = -1)
   private final Long id;
   @ApiModelProperty(value = "Product name", example = "Soda")
   private final String productName;

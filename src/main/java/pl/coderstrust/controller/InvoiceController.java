@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import pl.coderstrust.model.Invoice;
+import pl.coderstrust.service.InvoiceEmailService;
 import pl.coderstrust.service.InvoiceService;
 import pl.coderstrust.service.ServiceOperationException;
 
@@ -34,18 +34,25 @@ public class InvoiceController {
   private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);
   private InvoiceService invoiceService;
 
+  private InvoiceEmailService invoiceEmailService;
+
   @Autowired
-  public InvoiceController(InvoiceService invoiceService) {
+  public InvoiceController(InvoiceService invoiceService, InvoiceEmailService invoiceEmailService) {
     if (invoiceService == null) {
       throw new IllegalArgumentException("Invoice service cannot be null");
     }
+
+    if (invoiceEmailService == null) {
+      throw new IllegalArgumentException("Invoice email cannot be null");
+    }
     this.invoiceService = invoiceService;
+    this.invoiceEmailService = invoiceEmailService;
   }
 
   @GetMapping(produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Get all invoices", response = Invoice.class, responseContainer = "List")
-  @ApiResponses({
+  @ApiResponses( {
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 500, message = "Internal server error.")})
   public ResponseEntity<?> getAll() {
@@ -63,7 +70,7 @@ public class InvoiceController {
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Get a single invoice by id", response = Invoice.class)
   @ApiImplicitParam(name = "id", value = "Only digits possible, e.g. 7565", example = "7865", dataType = "Long")
-  @ApiResponses({
+  @ApiResponses( {
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 404, message = "Invoice not found for passed id."),
       @ApiResponse(code = 500, message = "Internal server error.")})
@@ -111,7 +118,7 @@ public class InvoiceController {
   @PostMapping(produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Add new invoice", response = Invoice.class)
-  @ApiResponses({
+  @ApiResponses( {
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 400, message = "Passed invoice is invalid."),
       @ApiResponse(code = 409, message = "Invoice already exists"),
@@ -125,7 +132,9 @@ public class InvoiceController {
       if (invoice.getId() != null && invoiceService.invoiceExists(invoice.getId())) {
         return new ResponseEntity<>("Invoice already exist.", HttpStatus.CONFLICT);
       }
-      return new ResponseEntity(invoiceService.addInvoice(invoice), HttpStatus.OK);
+      Invoice addedInvoice = invoiceService.addInvoice(invoice);
+      invoiceEmailService.sendEmailWithInvoice(addedInvoice);
+      return new ResponseEntity(addedInvoice, HttpStatus.OK);
     } catch (ServiceOperationException e) {
       String message = String.format("An error occurred during adding invoice. Invoice: %s", invoice);
       logger.error(message, e);
@@ -137,7 +146,7 @@ public class InvoiceController {
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Update existing invoice.", response = Invoice.class)
   @ApiImplicitParam(name = "id", value = "Only digits possible, e.g. 7565", example = "7865", dataType = "Long")
-  @ApiResponses({
+  @ApiResponses( {
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 400, message = "Passed data is invalid."),
       @ApiResponse(code = 404, message = "Invoice not found for passed id."),
