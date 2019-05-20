@@ -40,37 +40,42 @@ public class PdfService {
       document.open();
 
       addInvoiceNumber(document, invoice);
+      addDateSection(document, invoice);
       addSellerAndBuyerSection(document, invoice);
-      addInvoiceEntryTable(document, invoice);
+      addInvoiceEntries(document, invoice);
 
       document.close();
       return stream.toByteArray();
     } catch (DocumentException e) {
-      throw new ServiceOperationException("Errorrrrr", e);
+      throw new ServiceOperationException("An error ocured during getting an invoice", e);
     }
   }
 
   private void addDateSection(Document invoicePdf, Invoice invoice) throws DocumentException {
-
     PdfPTable table = new PdfPTable(2);
+    table.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    PdfPCell issueDate = new PdfPCell(new Phrase(String.format("Issue date:  ", invoice.getIssueDate())));
+    issueDate.setBorder(Rectangle.NO_BORDER);
+    issueDate.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    table.addCell(issueDate);
+    addEmptyLine(invoicePdf, 1);
+    PdfPCell dueDate = new PdfPCell(new Phrase(String.format("Due date: ", "   ", invoice.getDueDate())));
+    dueDate.setBorder(Rectangle.NO_BORDER);
+    dueDate.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    table.addCell(dueDate);
     invoicePdf.add(table);
-    //   table.addCell(addDateInformation(addDateInformation(LocalDate));
-  }
-
-  private PdfPCell addDateInformation(LocalDate date) {
-    PdfPCell dateInformation = new PdfPCell();
-//    dateInformation.addElement(new Phrase(" Issue date: " + dateInformation.dat()));
-//    dateInformation.addElement(new Phrase(" Due date: " + dateInformation.getTaxId()));
-    dateInformation.setBorder(Rectangle.NO_BORDER);
-    return dateInformation;
   }
 
   private void addInvoiceNumber(Document invoicePdf, Invoice invoice) throws DocumentException {
+    addEmptyLine(invoicePdf, 2);
     PdfPTable table = new PdfPTable(2);
+    table.setHorizontalAlignment(Element.ALIGN_CENTER);
     PdfPCell invoiceNumber = new PdfPCell(new Phrase("InvoiceNumber:"));
     invoiceNumber.setBorder(Rectangle.NO_BORDER);
     table.addCell(invoiceNumber);
-    table.addCell(invoice.getNumber());
+    PdfPCell invoiceGetNumber = new PdfPCell(Phrase.getInstance(invoice.getNumber()));
+    table.addCell(invoiceGetNumber);
+    invoiceGetNumber.setBorder(Rectangle.NO_BORDER);
     invoicePdf.add(table);
   }
 
@@ -117,20 +122,16 @@ public class PdfService {
     invoicePdf.add(emptyLine);
   }
 
-  private void addInvoiceEntryTable(Document invoicePdf, Invoice invoice) throws DocumentException {
+  private void addInvoiceEntryTable(Document invoicePdf) throws DocumentException {
 
     addEmptyLine(invoicePdf, 2);
-    final PdfPTable invoiceEntryTable = new PdfPTable(7);
+    PdfPTable invoiceEntryTable = new PdfPTable(6);
 
     PdfPCell headerCell = new PdfPCell(new Phrase("Product name"));
     headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
     invoiceEntryTable.addCell(headerCell);
 
     headerCell = new PdfPCell(new Phrase("Quantity"));
-    headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    invoiceEntryTable.addCell(headerCell);
-
-    headerCell = new PdfPCell(new Phrase("Unit"));
     headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
     invoiceEntryTable.addCell(headerCell);
 
@@ -150,14 +151,23 @@ public class PdfService {
     headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
     invoiceEntryTable.addCell(headerCell);
 
-//    invoiceEntryTable.addCell(addInvoiceEntryDetails(invoiceEntry.getProductName());
     invoicePdf.add(invoiceEntryTable);
   }
 
-  private PdfPCell addInvoiceEntryDetails(InvoiceEntry invoiceEntry) {
-    PdfPCell invoiceEntryDetails = new PdfPCell();
-    invoiceEntryDetails.addElement(new Phrase(" ProductName: " + invoiceEntry.getProductName()));
+  private void addInvoiceEntries(Document invoicePdf, Invoice invoice) throws DocumentException {
 
-    return invoiceEntryDetails;
+    addInvoiceEntryTable(invoicePdf);
+
+    for (InvoiceEntry entry : invoice.getEntries()) {
+      PdfPTable table = new PdfPTable(6);
+      table.addCell(new Phrase(entry.getProductName()));
+      table.addCell(new Phrase(entry.getQuantity()));
+      table.addCell(new Phrase(String.valueOf(entry.getPrice())));
+      table.addCell(new Phrase(String.valueOf(entry.getVatRate())));
+      table.addCell(new Phrase(String.valueOf(entry.getVatValue())));
+      table.addCell(new Phrase(String.valueOf(entry.getGrossValue())));
+
+      invoicePdf.add(table);
+    }
   }
 }
