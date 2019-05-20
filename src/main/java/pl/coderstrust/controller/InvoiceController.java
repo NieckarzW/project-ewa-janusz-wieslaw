@@ -1,20 +1,16 @@
 package pl.coderstrust.controller;
 
-import com.itextpdf.text.pdf.parser.Path;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,14 +22,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import pl.coderstrust.model.Invoice;
+import pl.coderstrust.service.InvoicePdfService;
 import pl.coderstrust.service.InvoiceService;
-import pl.coderstrust.service.PdfService;
 import pl.coderstrust.service.ServiceOperationException;
 
 @RestController
@@ -43,24 +37,24 @@ public class InvoiceController {
 
   private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);
   private InvoiceService invoiceService;
-  private PdfService pdfService;
+  private InvoicePdfService invoicePdfService;
 
   @Autowired
-  public InvoiceController(InvoiceService invoiceService, PdfService pdfService) {
+  public InvoiceController(InvoiceService invoiceService, InvoicePdfService invoicePdfService) {
     if (invoiceService == null) {
       throw new IllegalArgumentException("Invoice service cannot be null");
     }
-    if (pdfService == null) {
+    if (invoicePdfService == null) {
       throw new IllegalArgumentException("Pdf service cannot be null");
     }
     this.invoiceService = invoiceService;
-    this.pdfService = pdfService;
+    this.invoicePdfService = invoicePdfService;
   }
 
   @GetMapping(produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Get all invoices", response = Invoice.class, responseContainer = "List")
-  @ApiResponses( {
+  @ApiResponses({
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 500, message = "Internal server error.")})
   public ResponseEntity<?> getAll() {
@@ -78,7 +72,7 @@ public class InvoiceController {
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Get a single invoice by id", response = Invoice.class)
   @ApiImplicitParam(name = "id", value = "Only digits possible, e.g. 7565", example = "7865", dataType = "Long")
-  @ApiResponses( {
+  @ApiResponses({
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 404, message = "Invoice not found for passed id."),
       @ApiResponse(code = 500, message = "Internal server error.")})
@@ -126,7 +120,7 @@ public class InvoiceController {
   @PostMapping(produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Add new invoice", response = Invoice.class)
-  @ApiResponses( {
+  @ApiResponses({
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 400, message = "Passed invoice is invalid."),
       @ApiResponse(code = 409, message = "Invoice already exists"),
@@ -152,7 +146,7 @@ public class InvoiceController {
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Update existing invoice.", response = Invoice.class)
   @ApiImplicitParam(name = "id", value = "Only digits possible, e.g. 7565", example = "7865", dataType = "Long")
-  @ApiResponses( {
+  @ApiResponses({
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 400, message = "Passed data is invalid."),
       @ApiResponse(code = 404, message = "Invoice not found for passed id."),
@@ -181,7 +175,7 @@ public class InvoiceController {
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Delete an invoice by id", response = Invoice.class)
   @ApiImplicitParam(name = "id", value = "Only digits possible, e.g. 7565", example = "7865", dataType = "Long")
-  @ApiResponses( {
+  @ApiResponses({
       @ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 404, message = "Invoice not found for passed id."),
       @ApiResponse(code = 500, message = "Internal server error.")})
@@ -204,7 +198,7 @@ public class InvoiceController {
   @DeleteMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @ApiOperation(value = "Delete all invoices.")
-  @ApiResponses( {
+  @ApiResponses({
       @ApiResponse(code = 204, message = "OK"),
       @ApiResponse(code = 500, message = "Internal server error.")})
   public ResponseEntity<?> removeAll() {
@@ -219,29 +213,27 @@ public class InvoiceController {
     }
   }
 
-// anotacje jak w pozostałych metodach
-
   @GetMapping(path = "/pdf/{id}")
   @ResponseStatus(HttpStatus.OK)
-  @ApiOperation(value = "Create pdf invoice", response = Invoice.class)
-  @ApiResponses( {
+  @ApiOperation(value = "Get a single invoice as PDF file.", response = Invoice.class)
+  @ApiImplicitParam(name = "id", value = "Only digits possible, e.g. 7565", example = "7865", dataType = "Long")
+  @ApiResponses({
       @ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Passed invoice is invalid."),
-      @ApiResponse(code = 409, message = "Invoice already exists"),
+      @ApiResponse(code = 404, message = "Invoice not found for passed id."),
       @ApiResponse(code = 500, message = "Internal server error.")})
-  public ResponseEntity<?> getPdf(@PathVariable long id) throws ServiceOperationException {
+  public ResponseEntity<?> getInvoiceAsPdf(@PathVariable long id)  {
     try {
-      logger.debug("Creating Pdf");
+      logger.debug("Getting an invoice as PDF by id: {}", id);
       Optional<Invoice> invoice = invoiceService.getInvoice(id);
       if (invoice.isPresent()) {
-        byte[] byteArray = pdfService.getInvoiceAsPdf(invoice.get());
+        byte[] byteArray = invoicePdfService.getInvoiceAsPdf(invoice.get());
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setContentType(MediaType.APPLICATION_PDF);
         return new ResponseEntity<>(byteArray, responseHeaders, HttpStatus.OK);
       }
       return new ResponseEntity<>(String.format("Invoice with %d id does not exist.", id), HttpStatus.NOT_FOUND);
     } catch (ServiceOperationException e) {
-      String message = String.format("An error occurred during getting invoice as pdf.Invoice id: %d", id);
+      String message = String.format("An error occurred during getting invoice as PDF. Invoice id: %d", id);
       logger.error(message, e);
       return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
