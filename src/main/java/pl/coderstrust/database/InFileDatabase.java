@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.coderstrust.configuration.InFileDatabaseProperties;
 import pl.coderstrust.helpers.FileHelper;
@@ -14,6 +16,7 @@ import pl.coderstrust.model.Invoice;
 
 public class InFileDatabase implements Database {
 
+  private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
   private FileHelper fileHelper;
   private ObjectMapper objectMapper;
   private InFileDatabaseProperties inFileDatabaseProperties;
@@ -48,6 +51,7 @@ public class InFileDatabase implements Database {
     if (invoice == null) {
       throw new IllegalArgumentException("Invoice cannot be null");
     }
+    logger.debug("Saving invoice: {}", invoice);
     try {
       if (invoice.getId() == null || !isInvoiceExist(invoice.getId())) {
         return insertInvoice(invoice);
@@ -63,6 +67,7 @@ public class InFileDatabase implements Database {
     if (id == null) {
       throw new IllegalArgumentException("Id cannot be null");
     }
+    logger.debug("Deleting an invoice with id: {}", id);
     if (!invoiceExists(id)) {
       throw new DatabaseOperationException(String.format("There was no invoice in database with id: %s", id));
     }
@@ -78,6 +83,7 @@ public class InFileDatabase implements Database {
     if (id == null) {
       throw new IllegalArgumentException("Id cannot be null");
     }
+    logger.debug("Getting invoice with following id {}", id);
     try {
       return getInvoices()
           .stream()
@@ -90,6 +96,7 @@ public class InFileDatabase implements Database {
 
   @Override
   public synchronized List<Invoice> getAllInvoices() throws DatabaseOperationException {
+    logger.debug("Getting all invoices");
     try {
       return getInvoices();
     } catch (IOException e) {
@@ -99,6 +106,7 @@ public class InFileDatabase implements Database {
 
   @Override
   public synchronized void deleteAllInvoices() throws DatabaseOperationException {
+    logger.debug("Deleting all invoices");
     try {
       fileHelper.clear(inFileDatabaseProperties.getFilePath());
     } catch (IOException e) {
@@ -111,6 +119,7 @@ public class InFileDatabase implements Database {
     if (id == null) {
       throw new IllegalArgumentException("Id cannot be null");
     }
+    logger.debug("Checking if invoice with following id: {} exists.", id);
     try {
       return isInvoiceExist(id);
     } catch (IOException e) {
@@ -120,6 +129,7 @@ public class InFileDatabase implements Database {
 
   @Override
   public synchronized long countInvoices() throws DatabaseOperationException {
+    logger.debug("Counting invoices");
     try {
       return getInvoices().size();
     } catch (IOException e) {
