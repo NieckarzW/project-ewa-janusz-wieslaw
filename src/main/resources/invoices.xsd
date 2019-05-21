@@ -1,0 +1,257 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="soap.coderstrust.pl"
+           targetNamespace="soap.coderstrust.pl" elementFormDefault="qualified">
+
+    <xs:element name="saveInvoiceRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="invoice" type="tns:invoice"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="saveInvoiceResponse">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="invoice" type="tns:invoice"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateInvoiceRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="invoice" type="tns:invoice"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateInvoiceResponse">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="invoice" type="tns:invoice"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deleteInvoiceRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deleteInvoiceResponse">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deleteAllInvoicesRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="deleteAllInvoicesResponse">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getAllInvoicesRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="getAll" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getAllInvoicesResponse">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="invoices" type="tns:invoice" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getInvoiceRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getInvoiceResponse">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="invoice" type="tns:invoice"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="invoiceExistsRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="invoiceExistsResponse">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="invoiceExists" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getInvoiceByNumberRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="number" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getInvoiceByNumberResponse">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:response">
+                    <xs:sequence>
+                        <xs:element name="invoice" type="tns:invoice"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="invoice">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="number" type="xs:string"/>
+            <xs:element name="dueDate" type="xs:date"/>
+            <xs:element name="issueDate" type="xs:date"/>
+            <xs:element name="seller" type="tns:company"/>
+            <xs:element name="buyer" type="tns:company"/>
+            <xs:element name="entries" type="tns:entriesList"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="company">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="accountNumber" type="xs:string"/>
+            <xs:element name="address" type="xs:string"/>
+            <xs:element name="email" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="phoneNumber" type="xs:string"/>
+            <xs:element name="taxId" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="invoiceEntry">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="grossValue" type="xs:decimal"/>
+            <xs:element name="price" type="xs:decimal"/>
+            <xs:element name="productName" type="xs:string"/>
+            <xs:element name="quantity" type="xs:long"/>
+            <xs:element name="vatRate" type="tns:vat"/>
+            <xs:element name="vatValue" type="xs:decimal"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="vat">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="VAT_23"/>
+            <xs:enumeration value="VAT_8"/>
+            <xs:enumeration value="VAT_5"/>
+            <xs:enumeration value="VAT_0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="entriesList">
+        <xs:sequence>
+            <xs:element name="invoiceEntries" type="tns:invoiceEntry" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="invoicesList">
+        <xs:sequence>
+            <xs:element name="invoices" type="tns:invoice" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="response">
+        <xs:sequence>
+            <xs:element name="status" type="tns:responseStatus"/>
+            <xs:element name="message" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="responseStatus">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SUCCESS"/>
+            <xs:enumeration value="FAILURE"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
