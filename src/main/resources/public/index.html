@@ -1,0 +1,42 @@
+<!doctype html>
+<html ng-app="Invoices">
+<head>
+    <title>Accounting System</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+    <script src="invoice.js"></script>
+</head>
+
+<body ng-controller="Invoice">
+
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>Number</th>
+        <th>Issue date</th>
+        <th>Buyer</th>
+        <th>Seller</th>
+        <th>Entries</th>
+    </tr>
+    <tr ng-repeat="invoice in invoices">
+        <td>{{invoice.id}}</td>
+        <td>{{invoice.number}}</td>
+        <td>{{invoice.issueDate}}</td>
+        <td>
+            <pre>{{invoice.buyer | json}}</pre>
+        </td>
+        <td>
+            <pre>{{invoice.seller | json}}</pre>
+        </td>
+        <td>
+            <ul>
+                <li>ng-repeat="entry in invoice.entries"
+                    <pre> {{entry | json}}</pre>
+                </li>
+            </ul>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
