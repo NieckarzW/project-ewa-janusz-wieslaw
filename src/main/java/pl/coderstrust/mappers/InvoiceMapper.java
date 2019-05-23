@@ -1,5 +1,7 @@
 package pl.coderstrust.mappers;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -7,6 +9,7 @@ import javax.xml.datatype.DatatypeFactory;
 import pl.coderstrust.model.InvoiceEntry;
 import pl.coderstrust.soap.models.EntriesList;
 import pl.coderstrust.soap.models.Invoice;
+import pl.coderstrust.soap.models.InvoicesList;
 
 public class InvoiceMapper {
 
@@ -48,4 +51,14 @@ public class InvoiceMapper {
     List<pl.coderstrust.soap.models.InvoiceEntry> listOfSoapEntries = soapEntries.getInvoiceEntries();
     return listOfSoapEntries.stream().map(InvoiceEntryMapper::mapSoapEntryToModelEntry).collect(Collectors.toList());
   }
+
+  public static InvoicesList mapModelInvoicesToSoapInvoices(Collection<pl.coderstrust.model.Invoice> modelInvoices) throws DatatypeConfigurationException {
+    List<Invoice> soapInvoices = new ArrayList<>();
+    for (pl.coderstrust.model.Invoice invoice : modelInvoices) {
+      soapInvoices.add(mapModelInvoiceToSoapInvoice(invoice));
+    }
+    return (InvoicesList) soapInvoices;
+  }
+
+
 }

@@ -3,13 +3,9 @@
 
     <xs:element name="saveInvoiceRequest">
         <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="invoice" type="tns:invoice"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
+            <xs:sequence>
+                <xs:element name="invoice" type="tns:invoice"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 
@@ -27,13 +23,10 @@
 
     <xs:element name="updateInvoiceRequest">
         <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="invoice" type="tns:invoice"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+                <xs:element name="invoice" type="tns:invoice"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 
@@ -51,13 +44,10 @@
 
     <xs:element name="deleteInvoiceRequest">
         <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="id" type="xs:long"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+
         </xs:complexType>
     </xs:element>
 
@@ -72,10 +62,6 @@
 
     <xs:element name="deleteAllInvoicesRequest">
         <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                </xs:extension>
-            </xs:complexContent>
         </xs:complexType>
     </xs:element>
 
@@ -90,13 +76,9 @@
 
     <xs:element name="getAllInvoicesRequest">
         <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="getAll" type="xs:string"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
+            <xs:sequence>
+                <xs:element name="getAll" type="xs:string"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 
@@ -114,13 +96,9 @@
 
     <xs:element name="getInvoiceRequest">
         <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="id" type="xs:long"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 
@@ -138,13 +116,9 @@
 
     <xs:element name="invoiceExistsRequest">
         <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="id" type="xs:long"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 
@@ -162,13 +136,9 @@
 
     <xs:element name="getInvoiceByNumberRequest">
         <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="number" type="xs:string"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
+            <xs:sequence>
+                <xs:element name="number" type="xs:string"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 
