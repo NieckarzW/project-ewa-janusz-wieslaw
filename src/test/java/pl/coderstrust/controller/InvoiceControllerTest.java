@@ -16,12 +16,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +33,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.coderstrust.generators.InvoiceGenerator;
 import pl.coderstrust.model.Invoice;
-import pl.coderstrust.service.InvoicePdfService;
 import pl.coderstrust.service.InvoiceEmailService;
+import pl.coderstrust.service.InvoicePdfService;
 import pl.coderstrust.service.InvoiceService;
 import pl.coderstrust.service.ServiceOperationException;
 
@@ -65,7 +65,7 @@ class InvoiceControllerTest {
 
   @Test
   void shouldThrowIllegalArgumentExceptionForNullAsInvoicePdfService() {
-    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(invoiceService, null, invoiceEmailService);
+    assertThrows(IllegalArgumentException.class, () -> new InvoiceController(invoiceService, null, invoiceEmailService));
   }
 
   @Test
