@@ -9,6 +9,18 @@ app.controller('InvoiceController', function($scope, $http) {
         })
     }
 
+//    function downloadPDF()
+//    {
+//    $http.get(baseUrl + apiUrl, { responseType: 'arraybuffer' })
+//          .success(function (response) {
+//             var file = new Blob([response], { type: 'application/pdf' });
+//             var fileURL = URL.createObjectURL(file);
+//             $scope.pdfContent = $sce.trustAsResourceUrl(fileURL);
+//           })
+//           .error(function () {
+//           });
+//             }
+
     function getAllInvoices()
     {
         $http.get('http://localhost:9090/invoices').
