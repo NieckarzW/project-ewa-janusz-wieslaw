@@ -50,6 +50,9 @@ public class HibernateDatabase implements Database {
     }
     try {
       logger.debug("Deleting invoice with following id: {}", id);
+      if (!repository.existsById(id)) {
+        throw new DatabaseOperationException(String.format("There was no invoice in database with id: %s", id));
+      }
       repository.deleteById(id);
     } catch (EmptyResultDataAccessException e) {
       String message = String.format("Encountered problems while removing invoice with following id: %d", id);
