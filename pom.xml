@@ -237,23 +237,34 @@
                 <version>2.22.1</version>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>2.4</version>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.14.0</version>
                 <executions>
                     <execution>
-                        <id>xjc</id>
                         <goals>
-                            <goal>xjc</goal>
+                            <goal>generate</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <sources>
-                        <source>src/main/resources/dummy.xsd</source>
-                        <source>src/main/resources/invoices.xsd</source>
-                    </sources>
-                    <packageName>coderstrust</packageName>
+                    <schemaDirectory>src/main/resources</schemaDirectory>
+                    <generateDirectory>src/main/java</generateDirectory>
+                    <generatePackage>pl.coderstrust.soap.bindingclasses</generatePackage>
+                    <extension>true</extension>
+                    <args>
+                        <arg>-XtoString</arg>
+                        <arg>-Xequals</arg>
+                        <arg>-XhashCode</arg>
+                        <arg>-Xcopyable</arg>
+                    </args>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.jvnet.jaxb2_commons</groupId>
+                            <artifactId>jaxb2-basics</artifactId>
+                            <version>0.6.4</version>
+                        </plugin>
+                    </plugins>
                 </configuration>
                 <dependencies>
                     <dependency>
