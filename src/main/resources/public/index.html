@@ -11,12 +11,6 @@
 </head>
 
 <body ng-controller="InvoiceController">
-<!--<div ng-controller="PDFController" class="modal fade" id="pdfModal" tabindex="-1" role="dialog" aria-hidden="true">-->
-    <!--<div class="modal-dialog modal-lg">-->
-        <!--<div class="modal-content" onloadstart="">-->
-            <!--<object data="{{pdfContent}}"  type="application/pdf" style="width:100%; height:1000px" />-->
-        <!--</div>-->
-    <!--</div>-->
 
 <table align="center" class="table table-striped">
     <thead>
@@ -48,23 +42,34 @@
                                     <td>
                                         <ul class="list-group">
                                             <li class="list-group-item active">Seller</li>
-                                            <li class="list-group-item">{{invoice.seller.name}}</li>
-                                            <li class="list-group-item">{{invoice.seller.address}}</li>
-                                            <li class="list-group-item">{{invoice.seller.taxId}}</li>
-                                            <li class="list-group-item">{{invoice.seller.accountNumber}}</li>
-                                            <li class="list-group-item">{{invoice.seller.phoneNumber}}</li>
-                                            <li class="list-group-item">{{invoice.seller.email}}</li>
+                                            <li class="list-group-item">Name: {{invoice.seller.name}}</li>
+                                            <li class="list-group-item">Address: {{invoice.seller.address}}</li>
+                                            <li class="list-group-item">Tax id: {{invoice.seller.taxId}}</li>
+                                            <li class="list-group-item">Account number: {{invoice.seller.accountNumber}}</li>
+                                            <li class="list-group-item">Phone number: {{invoice.seller.phoneNumber}}</li>
+                                            <li class="list-group-item">E-mail:{{invoice.seller.email}}</li>
                                         </ul>
                                     </td>
                                     <td>
                                         <ul class="list-group">
                                             <li class="list-group-item active">Buyer</li>
-                                            <li class="list-group-item">{{invoice.buyer.name}}</li>
-                                            <li class="list-group-item">{{invoice.buyer.address}}</li>
-                                            <li class="list-group-item">{{invoice.buyer.taxId}}</li>
-                                            <li class="list-group-item">{{invoice.buyer.accountNumber}}</li>
-                                            <li class="list-group-item">{{invoice.buyer.phoneNumber}}</li>
-                                            <li class="list-group-item">{{invoice.buyer.email}}</li>
+                                            <li class="list-group-item">Name: {{invoice.buyer.name}}</li>
+                                            <li class="list-group-item">Address: {{invoice.buyer.address}}</li>
+                                            <li class="list-group-item">Tax id: {{invoice.buyer.taxId}}</li>
+                                            <li class="list-group-item">Account number: {{invoice.buyer.accountNumber}}</li>
+                                            <li class="list-group-item">Phone number: {{invoice.buyer.phoneNumber}}</li>
+                                            <li class="list-group-item">E-mail: {{invoice.buyer.email}}</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="center">
+                                        <ul class="list-group" align="center">
+                                            <li class="list-group-item active">Invoice entries</li>
+                                            <li class="list-group-item">{{invoice.productName}}</li>
+                                            <li class="list-group-item">{{invoice.entry.price}}</li>
+
                                         </ul>
                                     </td>
                                 </tr>
@@ -76,11 +81,101 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="addInvoiceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addInvoiceModalLabel">Add invoice</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table align="center" class="table table-striped">
+                                <tr>
+                                    <td>
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">Seller</li>
+                                            <li class="list-group-item">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="name-sizing-sm">Small</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="name-sizing-sm" ng-model="newCompany.name">
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="address-sizing-sm">Small</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" ng-model="newCompany.address"/>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="taxId-sizing-sm">Small</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" ng-model="newCompany.taxId"/>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="accountNumber-sizing-sm">Small</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" ng-model="newCompany.accountNumber"/>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="phoneNumber-sizing-sm">Small</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" ng-model="newCompany.phoneNumber"/>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="email-sizing-sm">Small</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" ng-model="newCompany.email"/>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul class="list-group">
+                                            <li class="list-group-item active">Buyer</li>
+                                            <li class="list-group-item">{{newInvoice.buyer.name}}Name</li>
+                                            <li class="list-group-item">{{newInvoice.buyer.address}}</li>
+                                            <li class="list-group-item">{{newInvoice.buyer.taxId}}</li>
+                                            <li class="list-group-item">{{newInvoice.buyer.accountNumber}}</li>
+                                            <li class="list-group-item">{{newInvoice.buyer.phoneNumber}}</li>
+                                            <li class="list-group-item">{{newInvoice.buyer.email}}</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="addInvoice(newCompany)">Save</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#invoiceModal{{invoice.id}}">Show details</button>
             <button type="button" class="btn btn-danger btn-sm" ng-click="remove(invoice.id)">Delete</button>
-            <button type="button" class="btn btn-success btn-sm" ng-click="remove(invoice.id)">Pdf</button>
+            <button type="button" class="btn btn-success btn-sm" ng-click="pdf(invoice.id)">Pdf</button>
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addInvoiceModal">Add</button>
         </td>
     </tr>
+
     </tbody>
 </table>
 
