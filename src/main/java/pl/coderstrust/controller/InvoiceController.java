@@ -1,12 +1,12 @@
 package pl.coderstrust.controller;
 
+import java.util.Optional;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import pl.coderstrust.model.Company;
 import pl.coderstrust.model.Invoice;
 import pl.coderstrust.service.InvoiceEmailService;
 import pl.coderstrust.service.InvoicePdfService;
@@ -149,6 +150,14 @@ public class InvoiceController {
       logger.error(message, e);
       return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+
+  @PostMapping(produces = "application/json", path = "/company")
+  public ResponseEntity<?> addCompany(@RequestBody(required = false) Company company) {
+    Company newCopany = company;
+
+    return new ResponseEntity<>("SDfsd", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @PutMapping(path = "/{id}", produces = "application/json")
