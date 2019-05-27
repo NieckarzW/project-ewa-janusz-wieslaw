@@ -2,7 +2,7 @@ var app = angular.module('Invoices', []);
 
 app.controller('InvoiceController', function($scope, $http, $window) {
     getAllInvoices()
-    $scope.newCompany = getNewCompany();
+    $scope.newInvoice = getNewInvoice();
 
 /*       <li class="list-group-item">{{newInvoice.buyer.name}}</li>
                                         <li class="list-group-item">{{newInvoice.buyer.address}}</li>
@@ -25,6 +25,17 @@ app.controller('InvoiceController', function($scope, $http, $window) {
         $window.open('http://localhost:9090/invoices/pdf/' + id, '_blank')
      }
 
+     function getNewInvoice() {
+     var invoice = new Object();
+                 invoice.number = '';
+                 invoice.issueDate = '';
+                 invoice.dueDate= '';
+                 invoice.seller = getNewCompany();
+                 invoice.buyer = getNewCompany();
+                 invoice.entries = [];
+                return invoice;
+     }
+
      function getNewCompany(){
         var company = new Object();
             company.name = '';
@@ -44,4 +55,13 @@ app.controller('InvoiceController', function($scope, $http, $window) {
                 $scope.invoices = response.data;
             });
     }
+
+//    function getInvoiceEntries()
+//        {
+//            $http.get('http://localhost:9090/invoices').
+//                then(function(response) {
+//                    $scope.entries = response.data;
+//                });
+//        }
+
 });
