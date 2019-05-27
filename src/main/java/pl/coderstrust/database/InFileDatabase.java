@@ -131,6 +131,9 @@ public class InFileDatabase implements Database {
   public synchronized long countInvoices() throws DatabaseOperationException {
     logger.debug("Counting invoices");
     try {
+      if (fileHelper.isEmpty(inFileDatabaseProperties.getFilePath())) {
+        return 0;
+      }
       return getInvoices().size();
     } catch (IOException e) {
       throw new DatabaseOperationException("An error occurred while counting invoices", e);

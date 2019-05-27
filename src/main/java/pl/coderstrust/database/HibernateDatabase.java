@@ -3,7 +3,6 @@ package pl.coderstrust.database;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +49,9 @@ public class HibernateDatabase implements Database {
     }
     try {
       logger.debug("Deleting invoice with following id: {}", id);
+      if (!repository.existsById(id)) {
+        throw new DatabaseOperationException(String.format("There was no invoice in database with id: %s", id));
+      }
       repository.deleteById(id);
     } catch (EmptyResultDataAccessException e) {
       String message = String.format("Encountered problems while removing invoice with following id: %d", id);
