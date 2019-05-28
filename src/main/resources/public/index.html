@@ -33,7 +33,9 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Invoice details</h5>
                             <div>
-                            <table>{{invoice.number}}</table>
+                                <br>
+                            <table align="left">
+                                {{invoice.number}}</table>
                             </div>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -42,7 +44,7 @@
                         <div class="modal-body">
                             <table class="table table-striped">
                                 <tr>
-                                    <td>
+                                    <td width="50%">
                                         <ul class="list-group">
                                             <li class="list-group-item active">Seller</li>
                                             <li class="list-group-item">Name: {{invoice.seller.name}}</li>
@@ -53,8 +55,8 @@
                                             <li class="list-group-item">E-mail:{{invoice.seller.email}}</li>
                                         </ul>
                                     </td>
-                                    <td>
-                                        <ul class="list-group">
+                                    <td width="50%">
+                                        <ul class="list-group" width="50%">
                                             <li class="list-group-item active">Buyer</li>
                                             <li class="list-group-item">Name: {{invoice.buyer.name}}</li>
                                             <li class="list-group-item">Address: {{invoice.buyer.address}}</li>
