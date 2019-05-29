@@ -1,7 +1,7 @@
 package pl.coderstrust.mappers;
 
 
-import pl.coderstrust.soap.models.Company;
+import pl.coderstrust.soap.bindingclasses.Company;
 
 public class CompanyMapper {
 

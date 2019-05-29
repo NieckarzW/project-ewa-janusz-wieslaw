@@ -1,6 +1,6 @@
 package pl.coderstrust.mappers;
 
-import pl.coderstrust.soap.models.InvoiceEntry;
+import pl.coderstrust.soap.bindingclasses.InvoiceEntry;
 
 public class InvoiceEntryMapper {
 

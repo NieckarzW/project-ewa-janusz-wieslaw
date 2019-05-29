@@ -1,15 +1,14 @@
 package pl.coderstrust.mappers;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import pl.coderstrust.model.InvoiceEntry;
-import pl.coderstrust.soap.models.EntriesList;
-import pl.coderstrust.soap.models.Invoice;
-import pl.coderstrust.soap.models.InvoicesList;
+import pl.coderstrust.soap.bindingclasses.EntriesList;
+import pl.coderstrust.soap.bindingclasses.Invoice;
+import pl.coderstrust.soap.bindingclasses.InvoicesList;
 
 public class InvoiceMapper {
 
@@ -41,24 +40,22 @@ public class InvoiceMapper {
 
 
   private static EntriesList mapModelEntriesToSoapEntries(List<InvoiceEntry> modelEntries) {
-    List<pl.coderstrust.soap.models.InvoiceEntry> soapEntriesFromModelEntries = modelEntries.stream().map(InvoiceEntryMapper::mapModelEntryToSoapEntry).collect(Collectors.toList());
+    List<pl.coderstrust.soap.bindingclasses.InvoiceEntry> soapEntriesFromModelEntries = modelEntries.stream().map(InvoiceEntryMapper::mapModelEntryToSoapEntry).collect(Collectors.toList());
     EntriesList soapEntries = new EntriesList();
     soapEntries.getInvoiceEntries().addAll(soapEntriesFromModelEntries);
     return soapEntries;
   }
 
   private static List<InvoiceEntry> mapSoapEntriesToModelEntries(EntriesList soapEntries) {
-    List<pl.coderstrust.soap.models.InvoiceEntry> listOfSoapEntries = soapEntries.getInvoiceEntries();
+    List<pl.coderstrust.soap.bindingclasses.InvoiceEntry> listOfSoapEntries = soapEntries.getInvoiceEntries();
     return listOfSoapEntries.stream().map(InvoiceEntryMapper::mapSoapEntryToModelEntry).collect(Collectors.toList());
   }
 
   public static InvoicesList mapModelInvoicesToSoapInvoices(Collection<pl.coderstrust.model.Invoice> modelInvoices) throws DatatypeConfigurationException {
-    List<Invoice> soapInvoices = new ArrayList<>();
+    InvoicesList soapInvoices = new InvoicesList();
     for (pl.coderstrust.model.Invoice invoice : modelInvoices) {
-      soapInvoices.add(mapModelInvoiceToSoapInvoice(invoice));
+      soapInvoices.getInvoices().add(mapModelInvoiceToSoapInvoice(invoice));
     }
-    return (InvoicesList) soapInvoices;
+    return soapInvoices;
   }
-
-
 }

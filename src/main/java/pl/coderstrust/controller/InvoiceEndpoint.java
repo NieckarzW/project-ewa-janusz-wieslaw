@@ -11,22 +11,22 @@ import pl.coderstrust.mappers.InvoiceMapper;
 import pl.coderstrust.model.Invoice;
 import pl.coderstrust.service.InvoiceService;
 import pl.coderstrust.service.ServiceOperationException;
-import pl.coderstrust.soap.methods.DeleteAllInvoicesRequest;
-import pl.coderstrust.soap.methods.DeleteAllInvoicesResponse;
-import pl.coderstrust.soap.methods.DeleteInvoiceRequest;
-import pl.coderstrust.soap.methods.DeleteInvoiceResponse;
-import pl.coderstrust.soap.methods.GetAllInvoicesRequest;
-import pl.coderstrust.soap.methods.GetAllInvoicesResponse;
-import pl.coderstrust.soap.methods.GetInvoiceByNumberRequest;
-import pl.coderstrust.soap.methods.GetInvoiceByNumberResponse;
-import pl.coderstrust.soap.methods.GetInvoiceRequest;
-import pl.coderstrust.soap.methods.GetInvoiceResponse;
-import pl.coderstrust.soap.methods.ResponseStatus;
-import pl.coderstrust.soap.methods.SaveInvoiceRequest;
-import pl.coderstrust.soap.methods.SaveInvoiceResponse;
-import pl.coderstrust.soap.methods.UpdateInvoiceRequest;
-import pl.coderstrust.soap.methods.UpdateInvoiceResponse;
-import pl.coderstrust.soap.models.InvoicesList;
+import pl.coderstrust.soap.bindingclasses.DeleteAllInvoicesRequest;
+import pl.coderstrust.soap.bindingclasses.DeleteAllInvoicesResponse;
+import pl.coderstrust.soap.bindingclasses.DeleteInvoiceRequest;
+import pl.coderstrust.soap.bindingclasses.DeleteInvoiceResponse;
+import pl.coderstrust.soap.bindingclasses.GetAllInvoicesRequest;
+import pl.coderstrust.soap.bindingclasses.GetAllInvoicesResponse;
+import pl.coderstrust.soap.bindingclasses.GetInvoiceByNumberRequest;
+import pl.coderstrust.soap.bindingclasses.GetInvoiceByNumberResponse;
+import pl.coderstrust.soap.bindingclasses.GetInvoiceRequest;
+import pl.coderstrust.soap.bindingclasses.GetInvoiceResponse;
+import pl.coderstrust.soap.bindingclasses.InvoicesList;
+import pl.coderstrust.soap.bindingclasses.ResponseStatus;
+import pl.coderstrust.soap.bindingclasses.SaveInvoiceRequest;
+import pl.coderstrust.soap.bindingclasses.SaveInvoiceResponse;
+import pl.coderstrust.soap.bindingclasses.UpdateInvoiceRequest;
+import pl.coderstrust.soap.bindingclasses.UpdateInvoiceResponse;
 
 @Endpoint
 public class InvoiceEndpoint {
@@ -140,7 +140,7 @@ public class InvoiceEndpoint {
     }
   }
 
-  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getAllInvoices")
+  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getAllInvoicesRequest")
   @ResponsePayload
   public GetAllInvoicesResponse getAllInvoices(@RequestPayload GetAllInvoicesRequest request) {
     GetAllInvoicesResponse response = new GetAllInvoicesResponse();
@@ -155,7 +155,7 @@ public class InvoiceEndpoint {
     }
   }
 
-  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteInvoice")
+  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteInvoiceRequest")
   @ResponsePayload
   public DeleteInvoiceResponse deleteInvoice(@RequestPayload DeleteInvoiceRequest request) {
     DeleteInvoiceResponse response = new DeleteInvoiceResponse();
@@ -170,7 +170,7 @@ public class InvoiceEndpoint {
     return response;
   }
 
-  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteAllInvoices")
+  @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteAllInvoicesRequest")
   @ResponsePayload
   public DeleteAllInvoicesResponse deleteAllInvoices(@RequestPayload DeleteAllInvoicesRequest request) {
     DeleteAllInvoicesResponse response = new DeleteAllInvoicesResponse();
