@@ -77,7 +77,6 @@
     <xs:element name="getAllInvoicesRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="getAll" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -108,26 +107,6 @@
                 <xs:extension base="tns:response">
                     <xs:sequence>
                         <xs:element name="invoice" type="tns:invoice"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="invoiceExistsRequest">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="id" type="xs:long"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="invoiceExistsResponse">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="invoiceExists" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
