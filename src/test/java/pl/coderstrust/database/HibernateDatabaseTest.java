@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -134,12 +134,26 @@ class HibernateDatabaseTest {
     //given
     Long id = 1L;
     doNothing().when(repository).deleteById(id);
-
-    //when
-    database.deleteInvoice(id);
+    when(repository.existsById(id)).thenReturn(true);
 
     //then
+    database.deleteInvoice(id);
+    verify(repository).existsById(id);
     verify(repository).deleteById(id);
+  }
+
+  @Test
+  void shouldDeleteByIdShouldThrowExceptionWhenInvoiceDoesNotExist() {
+    //given
+    Long id = 1L;
+    when(repository.existsById(id)).thenReturn(false);
+
+    //when
+    assertThrows(DatabaseOperationException.class, () -> database.deleteInvoice(id));
+
+    //then
+    verify(repository).existsById(id);
+    verify(repository, never()).deleteById(id);
   }
 
   @Test
@@ -192,6 +206,7 @@ class HibernateDatabaseTest {
     Long id = 1L;
     EmptyResultDataAccessException mockedException = Mockito.mock(EmptyResultDataAccessException.class);
     doThrow(mockedException).when(repository).deleteById(id);
+    when(repository.existsById(id)).thenReturn(true);
 
     //Then
     assertThrows(DatabaseOperationException.class, () -> database.deleteInvoice(id));
