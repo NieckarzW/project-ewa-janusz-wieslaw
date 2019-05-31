@@ -1,5 +1,6 @@
 package pl.coderstrust.controller;
 
+import java.util.List;
 import java.util.Optional;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ import pl.coderstrust.soap.bindingclasses.GetInvoiceByNumberRequest;
 import pl.coderstrust.soap.bindingclasses.GetInvoiceByNumberResponse;
 import pl.coderstrust.soap.bindingclasses.GetInvoiceRequest;
 import pl.coderstrust.soap.bindingclasses.GetInvoiceResponse;
-import pl.coderstrust.soap.bindingclasses.InvoicesList;
 import pl.coderstrust.soap.bindingclasses.ResponseStatus;
 import pl.coderstrust.soap.bindingclasses.SaveInvoiceRequest;
 import pl.coderstrust.soap.bindingclasses.SaveInvoiceResponse;
@@ -127,6 +127,7 @@ public class InvoiceEndpoint {
       if (invoice.isPresent()) {
         response.setInvoice(InvoiceMapper.mapModelInvoiceToSoapInvoice(invoice.get()));
         response.setStatus(ResponseStatus.SUCCESS);
+        response.setMessage("OK");
         return response;
       } else {
         response.setStatus(ResponseStatus.FAILURE);
@@ -145,8 +146,10 @@ public class InvoiceEndpoint {
   public GetAllInvoicesResponse getAllInvoices(@RequestPayload GetAllInvoicesRequest request) {
     GetAllInvoicesResponse response = new GetAllInvoicesResponse();
     try {
-      InvoicesList invoices = InvoiceMapper.mapModelInvoicesToSoapInvoices(invoiceService.getAllInvoices());
+      List<pl.coderstrust.soap.bindingclasses.Invoice> invoices = InvoiceMapper.mapModelInvoicesToSoapInvoices(invoiceService.getAllInvoices());
+      response.getInvoices().addAll(invoices);
       response.setStatus(ResponseStatus.SUCCESS);
+      response.setMessage("OK");
       return response;
     } catch (DatatypeConfigurationException | ServiceOperationException e) {
       response.setStatus(ResponseStatus.FAILURE);
@@ -167,6 +170,7 @@ public class InvoiceEndpoint {
       return response;
     }
     response.setStatus(ResponseStatus.SUCCESS);
+    response.setMessage("OK");
     return response;
   }
 
@@ -181,6 +185,7 @@ public class InvoiceEndpoint {
       response.setMessage("An error occurred during deleting all invoices");
     }
     response.setStatus(ResponseStatus.SUCCESS);
+    response.setMessage("OK");
     return response;
   }
 }

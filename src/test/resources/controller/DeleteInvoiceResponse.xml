@@ -1,0 +1,4 @@
+<ns2:deleteInvoiceResponse xmlns:ns2="soap.coderstrust.pl">
+    <ns2:status>SUCCESS</ns2:status>
+    <ns2:message>OK</ns2:message>
+</ns2:deleteInvoiceResponse>
