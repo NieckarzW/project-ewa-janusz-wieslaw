@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -20,16 +21,22 @@ public class InvoiceEmailService {
 
   private MailProperties mailProperties;
 
+  private InvoicePdfService invoicePdfService;
+
   @Autowired
-  public InvoiceEmailService(JavaMailSender javaMailSender, MailProperties mailProperties) {
+  public InvoiceEmailService(JavaMailSender javaMailSender, MailProperties mailProperties, InvoicePdfService invoicePdfService) {
     if (javaMailSender == null) {
       throw new IllegalArgumentException("Java mail sender cannot be null");
     }
     if (mailProperties == null) {
       throw new IllegalArgumentException("Mail properties cannot be null");
     }
+    if (invoicePdfService == null) {
+      throw new IllegalArgumentException("Invoice PDF service cannot be null");
+    }
     this.javaMailSender = javaMailSender;
     this.mailProperties = mailProperties;
+    this.invoicePdfService = invoicePdfService;
   }
 
   @Async
@@ -46,8 +53,9 @@ public class InvoiceEmailService {
       helper.setFrom(mailProperties.getUsername());
       helper.setSubject(mailProperties.getProperties().get("title"));
       helper.setText(mailProperties.getProperties().get("content"));
+      helper.addAttachment(String.format("%s.pdf", invoice.getNumber()), new ByteArrayResource(invoicePdfService.getInvoiceAsPdf(invoice)));
       javaMailSender.send(mail);
-    } catch (MessagingException e) {
+    } catch (MessagingException | ServiceOperationException e) {
       logger.error("An error occurred during sending an email with invoice.", e);
     }
   }
