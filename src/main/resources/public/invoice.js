@@ -2,24 +2,45 @@ var app = angular.module('Invoices', []);
 
 app.controller('InvoiceController', function($scope, $http, $window) {
     getAllInvoices()
+    $scope.invoiceNumberToSearch = "";
     $scope.newInvoice = getNewInvoice();
-
-/*       <li class="list-group-item">{{newInvoice.buyer.name}}</li>
-                                        <li class="list-group-item">{{newInvoice.buyer.address}}</li>
-                                        <li class="list-group-item">{{newInvoice.buyer.taxId}}</li>
-                                        <li class="list-group-item">{{newInvoice.buyer.accountNumber}}</li>
-                                        <li class="list-group-item">{{newInvoice.buyer.phoneNumber}}</li>
-                                        <li class="list-group-item">{{newInvoice.buyer.email}}</li>*/
 
     $scope.addInvoice = function(company){
            $http.post('http://localhost:9090/invoices/company', $scope.newCompany);
+     }
+
+//    $scope.addEntry = function(entry){
+//    $scope.newInvoice.
+//    }
+
+    $scope.searchByNumber = function() {
+        $http.get('http://localhost:9090/invoices/byNumber?number='+ $scope.invoiceNumberToSearch).then(function(response) {
+                    $scope.invoices = [response.data]
+                   })
+    }
+
+    $scope.clearSearchResult = function() {
+        getAllInvoices();
+        $scope.invoiceNumberToSearch = "";
         }
+
+    $scope.updateInvoice = function(company){
+                   $http.get('http://localhost:9090/invoices/company').then(function() {
+                   getNewCompany()
+                   })
+     }
 
     $scope.remove = function(id){
         $http.delete('http://localhost:9090/invoices/' + id).then(function() {
             getAllInvoices()
         })
     }
+
+        $scope.removeAll = function(){
+            $http.delete('http://localhost:9090/invoices/').then(function() {
+                getAllInvoices()
+            })
+        }
 
     $scope.pdf = function(id){
         $window.open('http://localhost:9090/invoices/pdf/' + id, '_blank')
