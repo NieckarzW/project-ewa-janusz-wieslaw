@@ -1,8 +1,10 @@
 package pl.coderstrust.database;
 
 import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+@ConditionalOnProperty(name = "pl.coderstrust.database", havingValue = "in-file")
 @Component
 public class IdentifierGenerator {
 

@@ -10,10 +10,14 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
 import pl.coderstrust.configuration.InFileDatabaseProperties;
 import pl.coderstrust.helpers.FileHelper;
 import pl.coderstrust.model.Invoice;
 
+@ConditionalOnProperty(name = "pl.coderstrust.database", havingValue = "in-file")
+@Repository
 public class InFileDatabase implements Database {
 
   private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
