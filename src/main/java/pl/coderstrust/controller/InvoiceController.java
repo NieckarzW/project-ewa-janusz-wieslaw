@@ -102,9 +102,9 @@ public class InvoiceController {
   @ApiOperation(value = "Get a single invoice by number.", response = Invoice.class)
   @ApiImplicitParam(name = "number", value = "Possible letters numbers and sign '/'  e.g. 'FV/789006a'", example = "FV/789006a")
   @ApiResponses(value = {
-          @ApiResponse(code = 200, message = "OK"),
-          @ApiResponse(code = 404, message = "Invoice not found for passed number."),
-          @ApiResponse(code = 500, message = "Internal server error.")})
+      @ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 404, message = "Invoice not found for passed number."),
+      @ApiResponse(code = 500, message = "Internal server error.")})
   public ResponseEntity<?> getByNumber(@RequestParam String number) {
     if (number == null) {
       return new ResponseEntity<>("Number cannot be null.", HttpStatus.BAD_REQUEST);
@@ -225,11 +225,11 @@ public class InvoiceController {
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Get a single invoice as PDF file.", response = Invoice.class)
   @ApiImplicitParam(name = "id", value = "Only digits possible, e.g. 7565", example = "7865", dataType = "Long")
-  @ApiResponses({
-          @ApiResponse(code = 200, message = "OK"),
-          @ApiResponse(code = 404, message = "Invoice not found for passed id."),
-          @ApiResponse(code = 500, message = "Internal server error.")})
-  public ResponseEntity<?> getInvoiceAsPdf(@PathVariable long id)  {
+  @ApiResponses( {
+      @ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 404, message = "Invoice not found for passed id."),
+      @ApiResponse(code = 500, message = "Internal server error.")})
+  public ResponseEntity<?> getInvoiceAsPdf(@PathVariable long id) {
     try {
       logger.debug("Getting an invoice as PDF by id: {}", id);
       Optional<Invoice> invoice = invoiceService.getInvoice(id);
