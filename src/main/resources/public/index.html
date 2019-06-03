@@ -14,31 +14,30 @@
     <script crossorigin="anonymous"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="invoice.js"></script>
+    <script src="js/bootstrap-notify.min.js"></script>
+    <script src="js/invoices.js"></script>
     <link href="css/all.min.css" rel="stylesheet">
 </head>
-<body ng-controller="InvoiceController">
+<body ng-controller="InvoiceController" ng-init="getAllInvoices()">
 
 <table align="center" class="table table-striped">
     <tr>
         <th scope="col">Search invoice</th>
     </tr>
     <tr>
-    <td>
-        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text" id="btnGroupAddon"><i class="fas fa-file-invoice-dollar"></i></div>
+        <td>
+            <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text" id="btnGroupAddon"><i class="fas fa-file-invoice-dollar"></i></div>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Invoice number" aria-label="Invoice number" aria-describedby="btnGroupAddon" ng-model="invoiceNumberToSearch">
                 </div>
-                <input type="text" class="form-control" placeholder="Invoice number" aria-label="Invoice number" aria-describedby="btnGroupAddon" ng-model="invoiceNumberToSearch">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                    <button type="button" class="btn btn-danger btn-sm" ng-click="searchByNumber(invoiceNumberToSearch)">Search</button>
+                    <button type="button" class="btn btn-info btn-sm" ng-click="getAllInvoices(); invoiceNumberToSearch=''">Clear</button>
+                </div>
             </div>
-
-            <div class="btn-group mr-2" role="group" aria-label="First group">
-                <button type="button" class="btn btn-danger btn-sm" ng-click="searchByNumber()">Search</button>
-                <button type="button" class="btn btn-info btn-sm" ng-click="clearSearchResult()">Clear</button>
-            </div>
-        </div>
         </td>
     </tr>
 
@@ -46,7 +45,6 @@
         <td>
             <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                 <div class="btn-group mr-2" role="group" aria-label="First group">
-                    <button class="btn btn-warning btn-sm" data-target="#addInvoiceModal" data-toggle="modal" type="button">Add</button>
                     <button class="btn btn-dark btn-sm" ng-click="removeAll()" type="button">Delete all</button>
                 </div>
             </div>
@@ -68,13 +66,13 @@
             <td>{{invoice.seller.name}}</td>
             <td>{{invoice.buyer.name}}</td>
             <td>
-                <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
+                <div aria-hidden="true" aria-labelledby="invoiceModalLabel" class="modal fade"
                      id="invoiceModal{{invoice.id}}"
                      role="dialog" tabindex="-1">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Invoice number: {{invoice.number}}</h5>
+                                <h5 class="modal-title" id="invoiceModalLabel">Invoice number: {{invoice.number}}</h5>
                                 <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -138,259 +136,6 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div aria-hidden="true" aria-labelledby="exampleModalLabel2" class="modal fade" id="addInvoiceModal"
-                     role="dialog" tabindex="-1">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addInvoiceModalLabel">Add invoice</h5>
-                                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <table align="center" class="table table-striped">
-                                    <tr>
-                                        <td width="50%">
-                                            <ul class="list-group">
-                                                <li class="list-group-item active">Seller</li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="name-sizing-sm">Name</span>
-                                                        </div>
-                                                        <input aria-describedby="name-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.seller.name"
-                                                               type="text">
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                        <span class="input-group-text"
-                                                              id="address-sizing-sm">Address</span>
-                                                        </div>
-                                                        <input aria-describedby="inputGroup-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.seller.address"
-                                                               type="text"/>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                        <span class="input-group-text"
-                                                              id="taxId-sizing-sm">Tax id</span>
-                                                        </div>
-                                                        <input aria-describedby="inputGroup-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.seller.taxId"
-                                                               type="text"/>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="accountNumber-sizing-sm">Account number</span>
-                                                        </div>
-                                                        <input aria-describedby="inputGroup-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.seller.accountNumber"
-                                                               type="text"/>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="phoneNumber-sizing-sm">Phone number</span>
-                                                        </div>
-                                                        <input aria-describedby="inputGroup-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.seller.phoneNumber"
-                                                               type="text"/>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="email-sizing-sm">Email</span>
-                                                        </div>
-                                                        <input aria-describedby="inputGroup-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.seller.email"
-                                                               type="text"/>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td width="50%">
-                                            <ul class="list-group">
-                                                <li class="list-group-item active">Buyer</li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="name-sizing-sm2">Name</span>
-                                                        </div>
-                                                        <input aria-describedby="name-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.buyer.name"
-                                                               type="text">
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                        <span class="input-group-text"
-                                                              id="address-sizing-sm2">Address</span>
-                                                        </div>
-                                                        <input aria-describedby="inputGroup-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.buyer.address"
-                                                               type="text"/>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                        <span class="input-group-text"
-                                                              id="taxId-sizing-sm2">Tax id</span>
-                                                        </div>
-                                                        <input aria-describedby="inputGroup-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.buyer.taxId"
-                                                               type="text"/>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="accountNumber-sizing-sm2">Account number</span>
-                                                        </div>
-                                                        <input aria-describedby="inputGroup-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.buyer.accountNumber"
-                                                               type="text"/>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="phoneNumber-sizing-sm2">Phone number</span>
-                                                        </div>
-                                                        <input aria-describedby="inputGroup-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.buyer.phoneNumber"
-                                                               type="text"/>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <div class="input-group-prepend">
-                                                        <span class="input-group-text"
-                                                              id="email-sizing-sm2">Email</span>
-                                                        </div>
-                                                        <input aria-describedby="inputGroup-sizing-sm"
-                                                               aria-label="Sizing example input"
-                                                               class="form-control"
-                                                               ng-model="newInvoice.buyer.email"
-                                                               type="text"/>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <button class="btn btn-info btn-sm" data-target="#newInvoiceModel" data-toggle="modal" type="button">Add entry</button>
-                                            <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
-                                                 id="newInvoiceModel"
-                                                 role="dialog" tabindex="-1">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="newInvoiceModelLabel">New invoice entry</h5>
-                                                            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <ul class="list-group">
-                                                                <li class="list-group-item">
-                                                                    <div class="input-group input-group-sm mb-3">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text" id="name-sizing-sm3">Item</span>
-                                                                        </div>
-                                                                        <input aria-describedby="name-sizing-sm"
-                                                                               aria-label="Sizing example input"
-                                                                               class="form-control"
-                                                                               ng-model="newEntry.item"
-                                                                               type="text">
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button class="btn btn-secondary" data-dismiss="modal" ng-click="addEntry(newEntry)"
-                                                                    type="button">Save
-                                                            </button>
-                                                            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <table>
-                                                <tr>
-                                                    <td align="center">
-                                                        <table class="table table-striped">
-                                                            <tr>
-                                                                <th scope="col">Item</th>
-                                                                <th scope="col">Quantity</th>
-                                                                <th scope="col">Price</th>
-                                                                <th scope="col">Vat rate</th>
-                                                                <th scope="col">Vat Value</th>
-                                                                <th scope="col">Gross value</th>
-                                                            </tr>
-                                                            <tr ng-repeat="entry in newInvoice.entries">
-                                                                <td>{{entry.productName}}</td>
-                                                                <td>{{entry.quantity}}</td>
-                                                                <td>{{entry.price}}</td>
-                                                                <td>{{entry.vatRate}}</td>
-                                                                <td>{{entry.vatValue}}</td>
-                                                                <td>{{entry.grossValue}}</td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" data-dismiss="modal" ng-click="addInvoice(newInvoice)"
-                                        type="button">Save
-                                </button>
                                 <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
                             </div>
                         </div>

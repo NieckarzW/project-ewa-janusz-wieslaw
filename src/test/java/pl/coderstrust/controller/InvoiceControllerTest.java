@@ -452,8 +452,7 @@ class InvoiceControllerTest {
     when(invoicePdfService.getInvoiceAsPdf(invoice)).thenThrow(ServiceOperationException.class);
 
     //When
-    mvc.perform(get("/invoices/pdf/{id}", invoice.getId())
-            .accept(MediaType.APPLICATION_PDF))
+    mvc.perform(get("/invoices/pdf/{id}", invoice.getId()))
             .andExpect(status().isInternalServerError());
 
     //Then
