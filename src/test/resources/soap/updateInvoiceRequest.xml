@@ -1,0 +1,38 @@
+<soap:updateInvoiceRequest xmlns:soap="http://project-10-ewa-januss-wieslaw">
+    <soap:id>1</soap:id>
+    <soap:invoice>
+        <soap:id>1</soap:id>
+        <soap:number>QWERTY</soap:number>
+        <soap:dueDate>2019-05-01</soap:dueDate>
+        <soap:issueDate>2019-05-15</soap:issueDate>
+        <soap:seller>
+            <soap:id>1</soap:id>
+            <soap:accountNumber>PL 27 1140 2004 0000 3002 0135 5387</soap:accountNumber>
+            <soap:address>Wersalska 47/75, 91-203 Łódź</soap:address>
+            <soap:email>cocacola@coke.com</soap:email>
+            <soap:name>Coca-Cola</soap:name>
+            <soap:phoneNumber>(22) 519-55-55</soap:phoneNumber>
+            <soap:taxId>524-21-06-963</soap:taxId>
+        </soap:seller>
+        <soap:buyer>
+            <soap:id>2</soap:id>
+            <soap:accountNumber>PL 27 1140 2004 0000 3002 0135 5388</soap:accountNumber>
+            <soap:address>Wersalska 47/75, 91-203 Łódź</soap:address>
+            <soap:email>cocacola@coke.com</soap:email>
+            <soap:name>Coca-Cola</soap:name>
+            <soap:phoneNumber>(22) 519-55-56</soap:phoneNumber>
+            <soap:taxId>524-21-06-964</soap:taxId>
+        </soap:buyer>
+        <soap:entries>
+            <soap:invoiceEntries>
+                <soap:id>1</soap:id>
+                <soap:grossValue>14.95</soap:grossValue>
+                <soap:price>2.99</soap:price>
+                <soap:productName>Soda</soap:productName>
+                <soap:quantity>5</soap:quantity>
+                <soap:vatRate>VAT_23</soap:vatRate>
+                <soap:vatValue>0.72</soap:vatValue>
+            </soap:invoiceEntries>
+        </soap:entries>
+    </soap:invoice>
+</soap:updateInvoiceRequest>

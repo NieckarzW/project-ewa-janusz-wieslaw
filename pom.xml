@@ -176,6 +176,8 @@
                         <exclude>/pl/coderstrust/service/ServiceOperationException.class</exclude>
                         <exclude>/pl/coderstrust/service/InvoiceEmailService.class</exclude>
                         <exclude>/pl/coderstrust/Application.class</exclude>
+                        <exclude>/pl/coderstrust/soap/mappers/*.class</exclude>
+                        <exclude>/pl/coderstrust/soap/bindingclasses/*.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -236,6 +238,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <excludes>/pl/coderstrust/soap/bindingclasses/**</excludes>
                     <failsOnError>true</failsOnError>
                     <failOnViolation>true</failOnViolation>
                     <violationSeverity>warning</violationSeverity>
