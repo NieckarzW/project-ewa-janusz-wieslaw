@@ -17,6 +17,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +36,6 @@ import pl.coderstrust.service.InvoiceEmailService;
 import pl.coderstrust.service.InvoicePdfService;
 import pl.coderstrust.service.InvoiceService;
 import pl.coderstrust.service.ServiceOperationException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(InvoiceController.class)
