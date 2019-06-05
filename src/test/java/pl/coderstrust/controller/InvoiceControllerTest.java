@@ -16,12 +16,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -445,6 +445,7 @@ class InvoiceControllerTest {
   }
 
   @Test
+
   void shouldReturnInternalServerErrorDuringGettingInvoiceAsPdfWhenSomethingWentWrongOnServer() throws Exception {
     //Given
     Invoice invoice = InvoiceGenerator.getRandomInvoice();
@@ -452,8 +453,7 @@ class InvoiceControllerTest {
     when(invoicePdfService.getInvoiceAsPdf(invoice)).thenThrow(ServiceOperationException.class);
 
     //When
-    mvc.perform(get("/invoices/pdf/{id}", invoice.getId())
-            .accept(MediaType.APPLICATION_PDF))
+    mvc.perform(get("/invoices/pdf/{id}", invoice.getId()))
             .andExpect(status().isInternalServerError());
 
     //Then
