@@ -445,7 +445,6 @@ class InvoiceControllerTest {
   }
 
   @Test
-
   void shouldReturnInternalServerErrorDuringGettingInvoiceAsPdfWhenSomethingWentWrongOnServer() throws Exception {
     //Given
     Invoice invoice = InvoiceGenerator.getRandomInvoice();
