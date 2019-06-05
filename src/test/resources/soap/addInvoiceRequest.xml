@@ -1,6 +1,5 @@
-<soap:saveInvoiceRequest xmlns:soap="soap.coderstrust.pl">
+<soap:saveInvoiceRequest xmlns:soap="http://project-10-ewa-januss-wieslaw">
     <soap:invoice>
-        <soap:id>0</soap:id>
         <soap:number>FV 2019/05/01/01</soap:number>
         <soap:dueDate>2019-05-01</soap:dueDate>
         <soap:issueDate>2019-05-15</soap:issueDate>

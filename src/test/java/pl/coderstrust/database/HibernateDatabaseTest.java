@@ -143,7 +143,7 @@ class HibernateDatabaseTest {
   }
 
   @Test
-  void shouldDeleteByIdShouldThrowExceptionWhenInvoiceDoesNotExist() {
+  void deleteByIdShouldThrowExceptionWhenInvoiceDoesNotExist() {
     //given
     Long id = 1L;
     when(repository.existsById(id)).thenReturn(false);

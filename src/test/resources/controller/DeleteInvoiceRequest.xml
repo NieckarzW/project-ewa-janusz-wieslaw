@@ -1,3 +1,0 @@
-<soap:deleteInvoiceRequest xmlns:soap="soap.coderstrust.pl">
-    <soap:id>1</soap:id>
-</soap:deleteInvoiceRequest>

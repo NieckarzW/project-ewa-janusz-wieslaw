@@ -1,0 +1,3 @@
+<soap:deleteInvoiceRequest xmlns:soap="http://project-10-ewa-januss-wieslaw">
+    <soap:id>1</soap:id>
+</soap:deleteInvoiceRequest>

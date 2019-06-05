@@ -1,6 +1,6 @@
-<ns2:getInvoiceResponse xmlns:ns2="soap.coderstrust.pl">
+<ns2:invoiceResponse xmlns:ns2="http://project-10-ewa-januss-wieslaw">
     <ns2:status>SUCCESS</ns2:status>
-    <ns2:message>OK</ns2:message>
+    <ns2:message/>
     <ns2:invoice>
         <ns2:id>1</ns2:id>
         <ns2:number>QWERTY</ns2:number>
@@ -36,4 +36,4 @@
             </ns2:invoiceEntries>
         </ns2:entries>
     </ns2:invoice>
-</ns2:getInvoiceResponse>
+</ns2:invoiceResponse>

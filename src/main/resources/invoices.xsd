@@ -1,23 +1,11 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="soap.coderstrust.pl"
-           targetNamespace="soap.coderstrust.pl" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://project-10-ewa-januss-wieslaw"
+           targetNamespace="http://project-10-ewa-januss-wieslaw" elementFormDefault="qualified">
 
     <xs:element name="saveInvoiceRequest">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="invoice" type="tns:invoice"/>
             </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="saveInvoiceResponse">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="invoice" type="tns:invoice"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
         </xs:complexType>
     </xs:element>
 
@@ -30,18 +18,6 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="updateInvoiceResponse">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="invoice" type="tns:invoice"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
     <xs:element name="deleteInvoiceRequest">
         <xs:complexType>
             <xs:sequence>
@@ -51,26 +27,8 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="deleteInvoiceResponse">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
     <xs:element name="deleteAllInvoicesRequest">
         <xs:complexType>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="deleteAllInvoicesResponse">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                </xs:extension>
-            </xs:complexContent>
         </xs:complexType>
     </xs:element>
 
@@ -78,18 +36,6 @@
         <xs:complexType>
             <xs:sequence>
             </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="getAllInvoicesResponse">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="invoices" type="tns:invoice" minOccurs="0" maxOccurs="unbounded"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
         </xs:complexType>
     </xs:element>
 
@@ -101,18 +47,6 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="getInvoiceResponse">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="tns:response">
-                    <xs:sequence>
-                        <xs:element name="invoice" type="tns:invoice"/>
-                    </xs:sequence>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
     <xs:element name="getInvoiceByNumberRequest">
         <xs:complexType>
             <xs:sequence>
@@ -121,10 +55,10 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="getInvoiceByNumberResponse">
+    <xs:element name="invoiceResponse">
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="tns:response">
+                <xs:extension base="tns:responseBase">
                     <xs:sequence>
                         <xs:element name="invoice" type="tns:invoice"/>
                     </xs:sequence>
@@ -133,9 +67,37 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="invoicesResponse">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:responseBase">
+                    <xs:sequence>
+                        <xs:element name="invoices" type="tns:invoice" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="responseBase">
+        <xs:sequence>
+            <xs:element name="status" type="tns:responseStatus"/>
+            <xs:element name="message" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="response">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:responseBase">
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
     <xs:complexType name="invoice">
         <xs:sequence>
-            <xs:element name="id" type="xs:long"/>
+            <xs:element name="id" type="xs:long" nillable="true" minOccurs="0" form="qualified"/>
             <xs:element name="number" type="xs:string"/>
             <xs:element name="dueDate" type="xs:date"/>
             <xs:element name="issueDate" type="xs:date"/>
@@ -187,13 +149,6 @@
     <xs:complexType name="invoicesList">
         <xs:sequence>
             <xs:element name="invoices" type="tns:invoice" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="response">
-        <xs:sequence>
-            <xs:element name="status" type="tns:responseStatus"/>
-            <xs:element name="message" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
 

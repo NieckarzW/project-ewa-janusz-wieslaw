@@ -1,11 +1,11 @@
-package pl.coderstrust.mappers;
+package pl.coderstrust.soap.mappers;
 
 import pl.coderstrust.model.Vat;
 
 public class VatMapper {
 
-  public static Vat mapSoapVatToModelVat(pl.coderstrust.soap.bindingclasses.Vat soapVat) {
-    switch (soapVat) {
+  public static Vat mapVat(pl.coderstrust.soap.bindingclasses.Vat vat) {
+    switch (vat) {
       case VAT_0:
         return Vat.VAT_0;
       case VAT_5:
@@ -14,12 +14,13 @@ public class VatMapper {
         return Vat.VAT_8;
       case VAT_23:
         return Vat.VAT_23;
+      default:
+        return null;
     }
-    return null;
   }
 
-  public static pl.coderstrust.soap.bindingclasses.Vat mapModelVattoSoapVat(Vat modelVat) {
-    switch (modelVat) {
+  public static pl.coderstrust.soap.bindingclasses.Vat mapVat(Vat vat) {
+    switch (vat) {
       case VAT_0:
         return pl.coderstrust.soap.bindingclasses.Vat.VAT_0;
       case VAT_5:
@@ -28,7 +29,8 @@ public class VatMapper {
         return pl.coderstrust.soap.bindingclasses.Vat.VAT_8;
       case VAT_23:
         return pl.coderstrust.soap.bindingclasses.Vat.VAT_23;
+      default:
+        return null;
     }
-    return null;
   }
 }

@@ -1,4 +1,4 @@
-<soap:updateInvoiceRequest xmlns:soap="soap.coderstrust.pl">
+<soap:updateInvoiceRequest xmlns:soap="http://project-10-ewa-januss-wieslaw">
     <soap:id>1</soap:id>
     <soap:invoice>
         <soap:id>1</soap:id>

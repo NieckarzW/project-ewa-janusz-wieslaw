@@ -14,21 +14,21 @@ import org.springframework.xml.xsd.XsdSchema;
 
 @EnableWs
 @Configuration
-public class SoapConfiguration extends WsConfigurerAdapter {
+public class WebServiceConfig extends WsConfigurerAdapter {
   @Bean
   public ServletRegistrationBean messageDispatcherServlet(ApplicationContext applicationContext) {
     MessageDispatcherServlet servlet = new MessageDispatcherServlet();
     servlet.setApplicationContext(applicationContext);
     servlet.setTransformWsdlLocations(true);
-    return new ServletRegistrationBean(servlet, "/ws/*");
+    return new ServletRegistrationBean(servlet, "/soap/invoices/*");
   }
 
   @Bean(name = "invoices")
   public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema invoicesSchema) {
     DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
     wsdl11Definition.setPortTypeName("InvoicesPort");
-    wsdl11Definition.setLocationUri("/ws");
-    wsdl11Definition.setTargetNamespace("soap.coderstrust.pl");
+    wsdl11Definition.setLocationUri("/soap/invoices");
+    wsdl11Definition.setTargetNamespace("http://project-10-ewa-januss-wieslaw");
     wsdl11Definition.setSchema(invoicesSchema);
     return wsdl11Definition;
   }
