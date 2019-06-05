@@ -1,6 +1,5 @@
 package pl.coderstrust.controller;
 
-import java.util.Optional;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,6 +28,7 @@ import pl.coderstrust.service.InvoiceEmailService;
 import pl.coderstrust.service.InvoicePdfService;
 import pl.coderstrust.service.InvoiceService;
 import pl.coderstrust.service.ServiceOperationException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/invoices")
