@@ -47,8 +47,6 @@ spring.datasource.driverClassName=yourDatabaseDriver
 spring.datasource.username=yourDatabaseUsername
 spring.datasource.password=yourDatabasePassword
 ```
-## For end User
-
 ## Authors
 Project created as part of CodersTrust Java - First Project course by EwaNb, WN and Janusz under protective wings of ziebapawel
 
